@@ -1,1 +1,422 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101329">
+<title>Image to PDF | RYUHMO Tools</title>
+<style>
+:root{--bg:#0d1020;--panel:#171b32;--text:#f7f8ff;--muted:#b2b8d0;--green:#a5e34b;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+header{height:65px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#0d1020;border-bottom:1px solid var(--line)}
+.logo{font-size:20px;font-weight:900}.logo span,footer strong{color:var(--green)}
+.back{font-size:14px;color:#dbe1f8}
+.hero{text-align:center;padding:38px 18px 28px;background:radial-gradient(ellipse at 15% 15%,#40308088,transparent 50%),radial-gradient(ellipse at 85% 25%,#087f8a55,transparent 45%),linear-gradient(135deg,#171632,#111c37 60%,#102a38)}
+.pill{display:inline-block;border:1px solid #a5e34b66;background:#a5e34b14;color:#c4f58a;padding:5px 12px;border-radius:30px;font-size:11px;font-weight:bold;letter-spacing:1px}
+h1{font-size:clamp(30px,6vw,48px);line-height:1.2;margin:14px 0 8px}
+.gradient{background:linear-gradient(90deg,#b9f36e,#69e5df,#a8a0ff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:650px;margin:auto;color:#c4c9df;font-size:15px}
+main{max-width:900px;margin:auto;padding:25px 16px 55px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,3vw,24px);margin-bottom:18px}
+.panel h2{font-size:21px;margin:0 0 5px}
+.sub,.note{color:var(--muted);font-size:13px}
+.sub{margin:0 0 15px}
+label{display:block;margin:10px 0 5px;font-size:13px;color:#e5e9ff}
+input:not([type=checkbox]),select{width:100%;padding:11px;border-radius:9px;border:1px solid #3a4565;background:#10152a;color:white}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.btn{display:block;width:100%;margin-top:13px;background:var(--green);color:#15210c;border:0;border-radius:9px;padding:13px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:wait}
+.secondary{background:#252c49;color:#fff;border:1px solid #3a4565}
+.image-list{display:grid;gap:12px;margin-top:15px}
+.image-card{padding:13px;border:1px solid #3a4565;background:#10152a;border-radius:12px}
+.image-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.image-head strong{overflow-wrap:anywhere;font-size:13px}
+.image-head button{background:#3b2030;color:#ffd5df;border:1px solid #754154;border-radius:8px;padding:7px 10px;cursor:pointer}
+.stage{display:flex;justify-content:center;align-items:center;min-height:100px;overflow:hidden;margin-top:10px;background:#0b1020;border-radius:8px}
+.stage canvas{display:block;max-width:100%;max-height:45vh;height:auto;touch-action:none}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+.smallbtn{border:1px solid #3a4565;background:#252c49;color:#fff;border-radius:8px;padding:9px 4px;font-size:12px;font-weight:bold;cursor:pointer}
+.status{font-size:13px;min-height:24px;margin:10px 0 0;color:#c7f59b}
+.note{line-height:1.6}
+footer{text-align:center;padding:24px 15px;border-top:1px solid var(--line);color:#9ca5c1;font-size:12px}
+@media(max-width:600px){header{height:62px;padding:0 16px}.logo{font-size:18px}.hero{padding:34px 16px 25px}.actions{gap:5px}.smallbtn{font-size:11px}}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html">RYUHMO <span>TOOLS.</span></a>
+<a class="back" href="index.html">← All tools</a>
+</header>
+
+<section class="hero">
+<div class="pill">FREE DOCUMENT TOOL</div>
+<h1>Image to <span class="gradient">PDF</span></h1>
+<p>Combine images into a PDF, crop each image freely and choose A4 or image-fit pages.</p>
+</section>
+
+<main>
+<section class="panel">
+<h2>1. Select images</h2>
+<p class="sub">Choose multiple images. Their order in the list determines the PDF page order.</p>
+<label for="files">Choose images</label>
+<input id="files" type="file" accept="image/*" multiple>
+<div class="grid">
+<div>
+<label for="pageSize">PDF page size</label>
+<select id="pageSize">
+<option value="a4">A4 page</option>
+<option value="fit">Fit page to image</option>
+</select>
+</div>
+<div>
+<label for="orientation">A4 orientation</label>
+<select id="orientation">
+<option value="auto">Automatic</option>
+<option value="portrait">Portrait</option>
+<option value="landscape">Landscape</option>
+</select>
+</div>
+</div>
+<div class="grid">
+<div>
+<label for="quality">Image quality</label>
+<select id="quality">
+<option value="1">Maximum</option>
+<option value="0.98">Very high</option>
+<option value="0.94">High</option>
+<option value="0.85">Smaller file</option>
+</select>
+</div>
+<div>
+<label for="targetKB">Target PDF size (KB, optional)</label>
+<input id="targetKB" type="number" min="1" placeholder="e.g. 500">
+</div>
+</div>
+<p class="note">A target size is best-effort. The tool will prioritize image quality and may exceed your requested size if necessary.</p>
+</section>
+
+<section class="panel">
+<h2>2. Crop your images</h2>
+<p class="sub">Drag inside an image's crop box to move it. Drag a corner handle to freely change the crop. Each image becomes one PDF page.</p>
+<div id="imageList" class="image-list"></div>
+<p id="cropStatus" class="status" aria-live="polite">Choose images to begin.</p>
+</section>
+
+<section class="panel">
+<h2>3. Create your PDF</h2>
+<p class="sub">Images are processed locally in your browser.</p>
+<button id="createBtn" class="btn" type="button">Create and download PDF</button>
+<button id="clearBtn" class="btn secondary" type="button">Clear all images</button>
+<p id="pdfStatus" class="status" aria-live="polite"></p>
+</section>
+</main>
+
+<footer>Made with care by <strong>RYUHMO</strong><br>© <span id="year"></span> RYUHMO Digital Tools</footer>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+
+let items=[],nextId=1,activeDrag=null;
+
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function status(id,msg){$(id).textContent=msg;}
+function cropPoint(e,c){
+ const b=c.getBoundingClientRect();
+ return {x:clamp((e.clientX-b.left)*c.width/b.width,0,c.width),
+ y:clamp((e.clientY-b.top)*c.height/b.height,0,c.height)};
+}
+function baseName(name){
+ return name.replace(/\.[^.]+$/,'').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_').slice(0,100)||'image';
+}
+function fileUrl(blob){return URL.createObjectURL(blob);}
+
+$('files').addEventListener('change',async e=>{
+ const files=[...e.target.files];
+ if(!files.length)return;
+ status('cropStatus','Loading images…');
+ let added=0;
+ for(const file of files){
+  if(!file.type.startsWith('image/'))continue;
+  try{
+   const url=fileUrl(file);
+   const img=await new Promise((resolve,reject)=>{
+    const im=new Image();
+    im.onload=()=>resolve(im);
+    im.onerror=()=>reject(new Error('Image could not be loaded'));
+    im.src=url;
+   });
+   items.push({
+    id:nextId++,file,img,url,
+    crop:{x:0,y:0,w:img.naturalWidth,h:img.naturalHeight},
+    rotated:false
+   });
+   added++;
+  }catch(err){}
+ }
+ renderList();
+ status('cropStatus',`${items.length} image(s) ready. Crop each image if needed.`);
+ e.target.value='';
+ if(!added&&items.length===0)status('cropStatus','No valid images could be loaded.');
+});
+
+function renderList(){
+ const root=$('imageList');
+ root.innerHTML='';
+ items.forEach((item,index)=>{
+  const card=document.createElement('div');
+  card.className='image-card';
+  card.innerHTML=`
+   <div class="image-head">
+    <strong></strong>
+    <button type="button" data-remove="${item.id}">Remove</button>
+   </div>
+   <div class="stage"><canvas aria-label="Crop preview"></canvas></div>
+   <div class="actions">
+    <button class="smallbtn" type="button" data-rotate="${item.id}">↻ Rotate</button>
+    <button class="smallbtn" type="button" data-reset="${item.id}">Reset crop</button>
+    <button class="smallbtn" type="button" data-full="${item.id}">Full image</button>
+   </div>
+   <p class="note"></p>`;
+  card.querySelector('strong').textContent=`Page ${index+1}: ${item.file.name}`;
+  card.querySelector('.note').textContent=`Original: ${item.img.naturalWidth} × ${item.img.naturalHeight} px`;
+  const canvas=card.querySelector('canvas');
+  canvas.width=item.img.naturalWidth;
+  canvas.height=item.img.naturalHeight;
+  item.canvas=canvas;
+  draw(item);
+  root.appendChild(card);
+  setupCropEvents(item);
+ });
+ root.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>{
+  const id=Number(btn.dataset.remove);
+  const item=items.find(x=>x.id===id);
+  if(item)URL.revokeObjectURL(item.url);
+  items=items.filter(x=>x.id!==id);
+  renderList();
+  status('cropStatus',`${items.length} image(s) remaining.`);
+ });
+ root.querySelectorAll('[data-reset],[data-full]').forEach(btn=>btn.onclick=()=>{
+  const item=items.find(x=>x.id===Number(btn.dataset.reset||btn.dataset.full));
+  if(!item)return;
+  item.crop={x:0,y:0,w:item.img.naturalWidth,h:item.img.naturalHeight};
+  draw(item);
+ });
+ root.querySelectorAll('[data-rotate]').forEach(btn=>btn.onclick=()=>rotateItem(Number(btn.dataset.rotate)));
+}
+
+function draw(item){
+ const c=item.canvas;
+ if(!c)return;
+ const x=c.getContext('2d'),r=item.crop;
+ x.clearRect(0,0,c.width,c.height);
+ x.drawImage(item.img,0,0,c.width,c.height);
+ x.fillStyle='rgba(0,0,0,.52)';
+ x.fillRect(0,0,c.width,c.height);
+ x.clearRect(r.x,r.y,r.w,r.h);
+ x.drawImage(item.img,r.x,r.y,r.w,r.h,r.x,r.y,r.w,r.h);
+ x.strokeStyle='#fff';x.lineWidth=Math.max(2,c.width/700);
+ x.strokeRect(r.x,r.y,r.w,r.h);
+ const s=Math.max(12,Math.min(28,c.width*.025));
+ x.fillStyle='#fff';x.strokeStyle='#45df91';x.lineWidth=2;
+ [[r.x,r.y],[r.x+r.w,r.y],[r.x,r.y+r.h],[r.x+r.w,r.y+r.h]].forEach(p=>{
+  x.fillRect(p[0]-s/2,p[1]-s/2,s,s);
+  x.strokeRect(p[0]-s/2,p[1]-s/2,s,s);
+ });
+}
+
+function setupCropEvents(item){
+ const c=item.canvas;
+ c.style.touchAction='none';
+ c.onpointerdown=e=>{
+  e.preventDefault();
+  const p=cropPoint(e,c),r=item.crop,hit=Math.max(16,c.width*.02);
+  let mode='new';
+  if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y)<hit)mode='tl';
+  else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y)<hit)mode='tr';
+  else if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y-r.h)<hit)mode='bl';
+  else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y-r.h)<hit)mode='br';
+  else if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h)mode='move';
+  activeDrag={item,x:p.x,y:p.y,old:{...r},mode};
+  c.setPointerCapture(e.pointerId);
+ };
+ c.onpointermove=e=>{
+  if(!activeDrag||activeDrag.item!==item)return;
+  e.preventDefault();
+  const p=cropPoint(e,c),d=activeDrag,r=d.old,dx=p.x-d.x,dy=p.y-d.y;
+  if(d.mode==='move'){
+   item.crop={x:clamp(r.x+dx,0,c.width-r.w),y:clamp(r.y+dy,0,c.height-r.h),w:r.w,h:r.h};
+  }else{
+   let l=r.x,t=r.y,rr=r.x+r.w,b=r.y+r.h;
+   if(d.mode==='new'){
+    l=Math.min(d.x,p.x);t=Math.min(d.y,p.y);
+    rr=Math.max(d.x,p.x);b=Math.max(d.y,p.y);
+   }else{
+    if(d.mode==='tl'||d.mode==='bl')l+=dx;
+    if(d.mode==='tr'||d.mode==='br')rr+=dx;
+    if(d.mode==='tl'||d.mode==='tr')t+=dy;
+    if(d.mode==='bl'||d.mode==='br')b+=dy;
+   }
+   l=clamp(l,0,c.width-1);t=clamp(t,0,c.height-1);
+   rr=clamp(rr,l+1,c.width);b=clamp(b,t+1,c.height);
+   item.crop={x:l,y:t,w:rr-l,h:b-t};
+  }
+  draw(item);
+ };
+ c.onpointerup=()=>{if(activeDrag&&activeDrag.item===item)activeDrag=null;};
+ c.onpointercancel=()=>{if(activeDrag&&activeDrag.item===item)activeDrag=null;};
+}
+
+async function rotateItem(id){
+ const item=items.find(x=>x.id===id);
+ if(!item)return;
+ const old=item.img,t=document.createElement('canvas');
+ t.width=old.naturalHeight;t.height=old.naturalWidth;
+ const x=t.getContext('2d');
+ x.translate(t.width/2,t.height/2);x.rotate(Math.PI/2);
+ x.drawImage(old,-old.naturalWidth/2,-old.naturalHeight/2);
+ const blob=await new Promise(resolve=>t.toBlob(resolve,'image/png'));
+ if(!blob)return;
+ const url=fileUrl(blob);
+ const img=await new Promise((resolve,reject)=>{
+  const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=url;
+ });
+ URL.revokeObjectURL(item.url);
+ item.url=url;item.img=img;item.rotated=true;
+ item.crop={x:0,y:0,w:img.naturalWidth,h:img.naturalHeight};
+ renderList();
+}
+
+function joinBytes(arrays){
+ const size=arrays.reduce((s,a)=>s+a.length,0);
+ const out=new Uint8Array(size);let at=0;
+ for(const a of arrays){out.set(a,at);at+=a.length;}
+ return out;
+}
+
+function buildPdf(pages){
+ const enc=new TextEncoder(),objects=[],kids=[];
+ const catalogId=1,pagesId=2;
+ function setObj(id,bytes){objects[id]=bytes;}
+ pages.forEach((p,i)=>{
+  const imgId=3+i*3,contentId=imgId+1,pageId=imgId+2;
+  kids.push(`${pageId} 0 R`);
+  const pw=p.pw,ph=p.ph,iw=p.iw,ih=p.ih,x=p.x,y=p.y;
+  const content=enc.encode(`q\n${iw} 0 0 ${ih} ${x} ${y} cm\n/Im0 Do\nQ\n`);
+  const head=enc.encode(`<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.bytes.length} >>\nstream\n`);
+  setObj(imgId,joinBytes([head,p.bytes,enc.encode('\nendstream')]));
+  setObj(contentId,joinBytes([enc.encode(`<< /Length ${content.length} >>\nstream\n`),content,enc.encode('endstream')]));
+  setObj(pageId,enc.encode(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`));
+ });
+ const total=2+pages.length*3;
+ setObj(catalogId,enc.encode(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`));
+ setObj(pagesId,enc.encode(`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${pages.length} >>`));
+ const parts=[];let length=0;const offsets=new Array(total+1).fill(0);
+ function push(b){parts.push(b);length+=b.length;}
+ push(enc.encode('%PDF-1.4\n'));
+ for(let id=1;id<=total;id++){
+  offsets[id]=length;
+  push(enc.encode(`${id} 0 obj\n`));push(objects[id]);push(enc.encode('\nendobj\n'));
+ }
+ const xrefOffset=length;
+ let xref=`xref\n0 ${total+1}\n0000000000 65535 f \n`;
+ for(let id=1;id<=total;id++)xref+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';
+ xref+=`trailer\n<< /Size ${total+1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+ push(enc.encode(xref));
+ return new Blob(parts,{type:'application/pdf'});
+}
+
+async function createPdf(){
+ if(!items.length){status('pdfStatus','Please select at least one image.');return;}
+ const btn=$('createBtn');btn.disabled=true;
+ status('pdfStatus','Preparing PDF pages…');
+ try{
+  const targetKB=Number($('targetKB').value);
+  const quality=Number($('quality').value);
+  let pages=[];
+  for(const item of items){
+   const r=item.crop;
+   const w=Math.max(1,Math.round(r.w)),h=Math.max(1,Math.round(r.h));
+   let bytes=null;
+   const full=Math.abs(r.x)<.5&&Math.abs(r.y)<.5&&Math.abs(r.w-item.img.naturalWidth)<.5&&Math.abs(r.h-item.img.naturalHeight)<.5;
+   if(full&&!item.rotated&&item.file.type==='image/jpeg'&&quality===1){
+    // Preserve original JPEG bytes when the image is unmodified.
+    bytes=new Uint8Array(await item.file.arrayBuffer());
+   }else{
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const x=c.getContext('2d',{alpha:false});
+    x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';
+    x.drawImage(item.img,r.x,r.y,r.w,r.h,0,0,w,h);
+    const blob=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',quality));
+    if(!blob)throw Error('Image export failed');
+    bytes=new Uint8Array(await blob.arrayBuffer());
+   }
+   pages.push({w,h,bytes});
+  }
+
+  // Build page layout. A4 dimensions are PDF points.
+  const a4w=595.28,a4h=841.89,mode=$('pageSize').value,orient=$('orientation').value;
+  pages=pages.map(p=>{
+   let pw,ph,iw,ih,x,y;
+   if(mode==='a4'){
+    pw=a4w;ph=a4h;
+    if(orient==='landscape'){pw=a4h;ph=a4w;}
+    if(orient==='auto'&&p.w>p.h){pw=a4h;ph=a4w;}
+    const s=Math.min(pw/p.w,ph/p.h);
+    iw=p.w*s;ih=p.h*s;x=(pw-iw)/2;y=(ph-ih)/2;
+   }else{
+    pw=p.w;ph=p.h;iw=p.w;ih=p.h;x=0;y=0;
+   }
+   return {...p,pw,ph,iw,ih,x,y};
+  });
+
+  let blob=buildPdf(pages);
+  // Best-effort target size: retry with lower image quality if requested.
+  // The original unmodified JPEG preservation path is kept when quality is maximum.
+  if(targetKB>0&&blob.size>targetKB*1024){
+   status('pdfStatus','Requested size is smaller than the first export. Trying compression…');
+   const qs=[.92,.85,.78,.7,.62,.54,.46,.38,.3];
+   for(const q of qs){
+    const compressed=[];
+    for(const item of items){
+     const r=item.crop,w=Math.max(1,Math.round(r.w)),h=Math.max(1,Math.round(r.h));
+     const c=document.createElement('canvas');c.width=w;c.height=h;
+     const x=c.getContext('2d',{alpha:false});
+     x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';
+     x.drawImage(item.img,r.x,r.y,r.w,r.h,0,0,w,h);
+     const b=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',q));
+     if(!b)throw Error('Compression failed');
+     compressed.push(new Uint8Array(await b.arrayBuffer()));
+    }
+    const test=buildPdf(pages.map((p,i)=>({...p,bytes:compressed[i]})));
+    blob=test;
+    if(blob.size<=targetKB*1024)break;
+   }
+  }
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='ryuhmo-images.pdf';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  const actual=(blob.size/1024).toFixed(1);
+  status('pdfStatus',`PDF downloaded: ${actual} KB, ${items.length} page(s).`+
+   (targetKB>0&&blob.size>targetKB*1024?` The requested ${targetKB} KB size could not be reached without more compression.`:''));
+ }catch(err){
+  console.error(err);
+  status('pdfStatus','PDF creation failed. Try fewer images or a smaller source image.');
+ }finally{btn.disabled=false;}
+}
+$('createBtn').addEventListener('click',createPdf);
+$('clearBtn').addEventListener('click',()=>{
+ items.forEach(item=>URL.revokeObjectURL(item.url));
+ items=[];renderList();
+ status('cropStatus','Choose images to begin.');
+ status('pdfStatus','');
+});
+</script>
+</body>
+</html>
+
