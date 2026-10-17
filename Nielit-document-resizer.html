@@ -1,1 +1,429 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101329">
+<title>NIELIT Document Resizer | RYUHMO</title>
+<style>
+:root{--bg:#0d1020;--panel:#171c34;--line:#303958;--text:#f4f6ff;--muted:#aab4d0;--blue:#6578ff;--cyan:#4edbd2;--green:#65e6a1}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#222c54,var(--bg) 65%);color:var(--text);font-family:Arial,sans-serif;padding:18px}
+main{max-width:1050px;margin:auto}
+header{text-align:center;padding:22px 8px}
+.logo{display:inline-block;background:linear-gradient(135deg,#6578ff,#4edbd2);color:#081126;font-weight:900;padding:10px 14px;border-radius:13px}
+h1{font-size:clamp(25px,5vw,38px);margin:17px 0 8px}
+p{line-height:1.55}
+.muted{color:var(--muted);font-size:14px}
+.panel,.filecard{background:rgba(23,28,52,.96);border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:16px}
+h2{font-size:19px;margin-top:0}
+button,.button{background:linear-gradient(120deg,var(--blue),#8c63ef);border:0;color:white;font-weight:700;padding:12px 15px;border-radius:10px;cursor:pointer;font-size:14px;display:inline-block}
+button:disabled{opacity:.45;cursor:not-allowed}
+.secondary{background:#28324e;border:1px solid #455274}
+.green{background:linear-gradient(120deg,#36bd83,#5dd8b5);color:#071c1a}
+input,select{background:#0d1328;border:1px solid #3c486b;color:white;border-radius:9px;padding:10px;width:100%;min-width:0}
+label{font-size:13px;color:#c5cde4;display:block;margin-bottom:7px}
+.folderbox{border:1px dashed #6978a8;text-align:center;padding:22px;border-radius:13px}
+.folderbox input{margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{background:#252e4b;border-radius:20px;padding:6px 10px;font-size:12px;color:#d9e2ff}
+.filehead{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.preview{width:100%;max-height:210px;object-fit:contain;background:#0a0e1d;border-radius:9px;margin:12px 0}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px}
+.status{font-size:13px;color:var(--cyan);margin-top:10px;overflow-wrap:anywhere}
+.progress{height:7px;background:#0a0e1d;border-radius:10px;overflow:hidden;margin-top:12px}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+small{color:var(--muted);line-height:1.5}
+@media(max-width:480px){body{padding:10px}.panel,.filecard{padding:13px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="logo">RYUHMO TOOLS</div>
+<h1>NIELIT Document Resizer</h1>
+<p class="muted">Resize passport photos, signatures and left thumb impressions for NIELIT document requirements.</p>
+<p style="color:#8fe9df">Select a folder · Resize automatically · Rename files · Download separately</p>
+</header>
+
+<section class="panel">
+<h2>1. Select your document folder</h2>
+<div class="folderbox">
+<strong>Select the folder containing your images</strong>
+<p class="muted">Supported: JPG, JPEG, PNG and WebP</p>
+<input type="file" id="folder" webkitdirectory directory multiple accept="image/jpeg,image/png,image/webp">
+</div>
+<div class="stats">
+<span class="pill" id="count">0 images found</span>
+<span class="pill">Output: JPG</span>
+<span class="pill">DPI: 150</span>
+</div>
+<p class="muted">Images are processed locally in your browser. They are not uploaded to a server.</p>
+</section>
+
+<section class="panel">
+<h2>2. NIELIT output settings</h2>
+<div class="grid">
+<div>
+<label for="profile">Apply format to all images</label>
+<select id="profile">
+<option value="auto">Auto-detect / individual formats</option>
+<option value="photo">Passport Photo</option>
+<option value="sign">Signature</option>
+<option value="thumb">Left Thumb Impression</option>
+</select>
+</div>
+<div>
+<label for="dpi">DPI metadata</label>
+<input id="dpi" type="number" value="150" min="1" max="1200">
+</div>
+</div>
+<p class="muted">Default dimensions and size ranges:</p>
+<div class="grid">
+<div class="pill">Photo: 132 × 170 px · 5–50 KB</div>
+<div class="pill">Signature: 170 × 132 px · 5–20 KB</div>
+<div class="pill">Left Thumb: 170 × 132 px · 5–20 KB</div>
+</div>
+<p class="muted">These are the configured defaults. Check the current NIELIT application notice for the exact requirements of your exam or recruitment.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:17px">
+<button id="process" class="green" disabled>Resize All Images</button>
+<button id="clear" class="secondary">Clear Folder</button>
+</div>
+<div class="progress"><div id="progressbar"></div></div>
+<p class="status" id="overall"></p>
+</section>
+
+<section>
+<div class="filehead">
+<h2>3. Review and rename files</h2>
+<span class="pill">Edit filenames before processing</span>
+</div>
+<div id="files">
+<div class="panel muted">Select a folder to display your images here.</div>
+</div>
+</section>
+
+<footer>RYUHMO Digital Tools · NIELIT Document Resizer</footer>
+</main>
+
+<script>
+const folder=document.getElementById('folder');
+const profile=document.getElementById('profile');
+const dpiInput=document.getElementById('dpi');
+const processBtn=document.getElementById('process');
+const clearBtn=document.getElementById('clear');
+const filesBox=document.getElementById('files');
+const countLabel=document.getElementById('count');
+const overall=document.getElementById('overall');
+const progressbar=document.getElementById('progressbar');
+
+let items=[];
+let busy=false;
+
+const FORMATS={
+ photo:{label:'Passport Photo',w:132,h:170,min:5,max:50},
+ sign:{label:'Signature',w:170,h:132,min:5,max:20},
+ thumb:{label:'Left Thumb Impression',w:170,h:132,min:5,max:20}
+};
+
+function baseName(name){
+ return name.replace(/\.[^.]+$/,'').trim();
+}
+
+function defaultOutputName(name){
+ let base=baseName(name);
+ if(/^WhatsApp\s+(Image|Video)/i.test(base)) base='WhatsApp';
+ else base=base.split(/\s+/)[0] || 'Document';
+ return base.replace(/[^\w-]+/g,'_')+'_edit';
+}
+
+function detectType(name){
+ const n=name.toLowerCase();
+ if(/thumb|left.?impression|impression|lti/.test(n)) return 'thumb';
+ if(/sign|signature|sig/.test(n)) return 'sign';
+ if(/photo|passport|image|pic/.test(n)) return 'photo';
+ return 'photo';
+}
+
+function fmtBytes(n){
+ if(n<1024) return n+' B';
+ return (n/1024).toFixed(1)+' KB';
+}
+
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+
+function loadImage(file){
+ return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>resolve({img,url});
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Could not open image'));};
+  img.src=url;
+ });
+}
+
+function canvasBlob(canvas,quality){
+ return new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',quality));
+}
+
+/* Set the JPEG JFIF density fields where the encoder provides a JFIF header. */
+function setJpegDpi(blob,dpi){
+ return blob.arrayBuffer().then(buffer=>{
+  const src=new Uint8Array(buffer);
+  const out=new Uint8Array(src);
+  const d=Math.max(1,Math.min(65535,Math.round(dpi)));
+  let pos=2;
+  while(pos+4<out.length){
+   if(out[pos]!==0xFF) break;
+   const marker=out[pos+1];
+   if(marker===0xDA || marker===0xD9) break;
+   const len=(out[pos+2]<<8)|out[pos+3];
+   if(len<2 || pos+2+len>out.length) break;
+   if(marker===0xE0 && len>=16 &&
+      out[pos+4]===0x4A && out[pos+5]===0x46 &&
+      out[pos+6]===0x49 && out[pos+7]===0x46 && out[pos+8]===0){
+    out[pos+11]=1;
+    out[pos+12]=(d>>8)&255;out[pos+13]=d&255;
+    out[pos+14]=(d>>8)&255;out[pos+15]=d&255;
+    return new Blob([out],{type:'image/jpeg'});
+   }
+   pos+=2+len;
+  }
+  return new Blob([out],{type:'image/jpeg'});
+ });
+}
+
+async function makeOutput(item){
+ const type=item.type;
+ const f=FORMATS[type];
+ const dpi=Number(dpiInput.value);
+ if(!Number.isFinite(dpi)||dpi<1||dpi>1200) throw new Error('Enter DPI between 1 and 1200.');
+
+ const {img,url}=await loadImage(item.file);
+ try{
+  const canvas=document.createElement('canvas');
+  canvas.width=f.w;canvas.height=f.h;
+  const ctx=canvas.getContext('2d',{alpha:false});
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,f.w,f.h);
+
+  /* Center-crop to the required aspect ratio, then resize to exact dimensions. */
+  const targetRatio=f.w/f.h;
+  const sourceRatio=img.naturalWidth/img.naturalHeight;
+  let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+  if(sourceRatio>targetRatio){
+   sw=img.naturalHeight*targetRatio;
+   sx=(img.naturalWidth-sw)/2;
+  }else{
+   sh=img.naturalWidth/targetRatio;
+   sy=(img.naturalHeight-sh)/2;
+  }
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality='high';
+  ctx.drawImage(img,sx,sy,sw,sh,0,0,f.w,f.h);
+
+  /* Search for the highest JPEG quality that fits the maximum size. */
+  let low=.15,high=.98,best=null;
+  for(let i=0;i<9;i++){
+   const q=(low+high)/2;
+   const blob=await canvasBlob(canvas,q);
+   if(!blob) throw new Error('JPEG export failed.');
+   if(blob.size<=f.max*1024){
+    best=blob;low=q;
+   }else high=q;
+  }
+  if(!best) best=await canvasBlob(canvas,.15);
+  const output=await setJpegDpi(best,dpi);
+  const finalSize=output.size/1024;
+  return {blob:output,width:f.w,height:f.h,finalSize,format:f};
+ }finally{
+  URL.revokeObjectURL(url);
+ }
+}
+
+function makeCard(item,index){
+ const card=document.createElement('article');
+ card.className='filecard';
+ card.dataset.index=index;
+ card.innerHTML=`
+ <div class="filehead">
+  <strong>${escapeHtml(item.file.name)}</strong>
+  <span class="pill">${fmtBytes(item.file.size)}</span>
+ </div>
+ <img class="preview" alt="Image preview">
+ <div class="fields">
+  <div>
+   <label>Document type</label>
+   <select class="type">
+    <option value="photo">Passport Photo</option>
+    <option value="sign">Signature</option>
+    <option value="thumb">Left Thumb Impression</option>
+   </select>
+  </div>
+  <div>
+   <label>Output filename (without .jpg)</label>
+   <input class="filename" maxlength="120">
+  </div>
+ </div>
+ <div class="stats">
+  <span class="pill dimensions"></span>
+  <span class="pill range"></span>
+ </div>
+ <p class="status result">Ready to resize</p>
+ <button class="secondary one" style="margin-top:10px">Resize this image</button>
+ <button class="download" style="display:none;margin-top:10px">Download edited JPG</button>
+ `;
+ const typeSelect=card.querySelector('.type');
+ typeSelect.value=item.type;
+ card.querySelector('.filename').value=item.outputName;
+ card.querySelector('.dimensions').textContent=FORMATS[item.type].w+' × '+FORMATS[item.type].h+' px';
+ card.querySelector('.range').textContent=FORMATS[item.type].min+'–'+FORMATS[item.type].max+' KB';
+ const preview=card.querySelector('.preview');
+ const previewUrl=URL.createObjectURL(item.file);
+ preview.src=previewUrl;
+ preview.onload=()=>URL.revokeObjectURL(previewUrl);
+
+ typeSelect.addEventListener('change',()=>{
+  item.type=typeSelect.value;
+  const f=FORMATS[item.type];
+  card.querySelector('.dimensions').textContent=f.w+' × '+f.h+' px';
+  card.querySelector('.range').textContent=f.min+'–'+f.max+' KB';
+  card.querySelector('.result').textContent='Format changed. Resize again.';
+  item.output=null;
+  card.querySelector('.download').style.display='none';
+ });
+ card.querySelector('.filename').addEventListener('input',e=>{
+  item.outputName=e.target.value.trim();
+ });
+ card.querySelector('.one').addEventListener('click',async()=>{
+  await processOne(item,card);
+ });
+ card.querySelector('.download').addEventListener('click',()=>downloadItem(item));
+ return card;
+}
+
+folder.addEventListener('change',()=>{
+ items.forEach(x=>{if(x.outputUrl)URL.revokeObjectURL(x.outputUrl)});
+ items=[];
+ const chosen=Array.from(folder.files||[]);
+ const images=chosen.filter(f=>/^image\/(jpeg|png|webp)$/i.test(f.type)||
+  /\.(jpe?g|png|webp)$/i.test(f.name));
+ items=images.map(file=>({
+  file,
+  type:detectType(file.name),
+  outputName:defaultOutputName(file.name),
+  output:null,
+  outputUrl:null
+ }));
+ countLabel.textContent=items.length+' images found';
+ processBtn.disabled=items.length===0;
+ overall.textContent=images.length<chosen.length?
+  'Skipped '+(chosen.length-images.length)+' unsupported files.':
+  'Folder loaded. Review each document type and filename.';
+ progressbar.style.width='0%';
+ if(!items.length){
+  filesBox.innerHTML='<div class="panel muted">No supported images found in this folder.</div>';
+  return;
+ }
+ filesBox.innerHTML='';
+ items.forEach((item,i)=>filesBox.appendChild(makeCard(item,i)));
+ if(profile.value!=='auto'){
+  items.forEach((item,i)=>{
+   item.type=profile.value;
+   const card=filesBox.children[i];
+   card.querySelector('.type').value=item.type;
+   card.querySelector('.dimensions').textContent=FORMATS[item.type].w+' × '+FORMATS[item.type].h+' px';
+   card.querySelector('.range').textContent=FORMATS[item.type].min+'–'+FORMATS[item.type].max+' KB';
+  });
+ }
+});
+
+profile.addEventListener('change',()=>{
+ if(profile.value==='auto') return;
+ items.forEach((item,i)=>{
+  item.type=profile.value;
+  const card=filesBox.children[i];
+  if(!card)return;
+  card.querySelector('.type').value=item.type;
+  card.querySelector('.dimensions').textContent=FORMATS[item.type].w+' × '+FORMATS[item.type].h+' px';
+  card.querySelector('.range').textContent=FORMATS[item.type].min+'–'+FORMATS[item.type].max+' KB';
+  card.querySelector('.result').textContent='Format changed. Resize again.';
+  item.output=null;
+  card.querySelector('.download').style.display='none';
+ });
+});
+
+async function processOne(item,card){
+ if(busy)return;
+ const button=card.querySelector('.one');
+ button.disabled=true;
+ card.querySelector('.result').textContent='Processing…';
+ try{
+  item.outputName=card.querySelector('.filename').value.trim()||defaultOutputName(item.file.name);
+  const result=await makeOutput(item);
+  item.output=result.blob;
+  item.outputUrl=URL.createObjectURL(result.blob);
+  card.querySelector('.result').textContent=
+   result.width+' × '+result.height+' px · '+result.finalSize.toFixed(1)+' KB · 150 DPI setting applied'+
+   (result.finalSize<result.format.min?' · Below minimum size':
+    result.finalSize>result.format.max?' · Above maximum size':' · Within size range');
+  card.querySelector('.download').style.display='inline-block';
+ }catch(err){
+  card.querySelector('.result').textContent='Error: '+err.message;
+ }finally{
+  button.disabled=false;
+ }
+}
+
+function downloadItem(item){
+ if(!item.output)return;
+ const name=(item.outputName||defaultOutputName(item.file.name))
+  .replace(/[<>:"/\\|?*\x00-\x1F]/g,'_').replace(/\.jpe?g$/i,'').trim()||'Document_edit';
+ const url=URL.createObjectURL(item.output);
+ const a=document.createElement('a');
+ a.href=url;a.download=name+'.jpg';
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+
+processBtn.addEventListener('click',async()=>{
+ if(busy||!items.length)return;
+ const dpi=Number(dpiInput.value);
+ if(!Number.isFinite(dpi)||dpi<1||dpi>1200){
+  overall.textContent='Please enter a DPI between 1 and 1200.';
+  return;
+ }
+ busy=true;processBtn.disabled=true;
+ let done=0;
+ overall.textContent='Resizing images…';
+ for(let i=0;i<items.length;i++){
+  const item=items[i],card=filesBox.children[i];
+  await processOne(item,card);
+  done++;
+  progressbar.style.width=(done/items.length*100)+'%';
+ }
+ overall.textContent='Processing finished. Download each edited image using its button.';
+ busy=false;processBtn.disabled=false;
+});
+
+clearBtn.addEventListener('click',()=>{
+ if(busy)return;
+ items.forEach(x=>{if(x.outputUrl)URL.revokeObjectURL(x.outputUrl)});
+ items=[];
+ folder.value='';
+ filesBox.innerHTML='<div class="panel muted">Select a folder to display your images here.</div>';
+ countLabel.textContent='0 images found';
+ processBtn.disabled=true;
+ overall.textContent='';
+ progressbar.style.width='0%';
+});
+</script>
+</body>
+</html>
