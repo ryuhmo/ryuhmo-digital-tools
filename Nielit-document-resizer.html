@@ -5,425 +5,374 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101329">
-<meta name="description" content="RYUHMO NIELIT Document Resizer">
 <title>NIELIT Document Resizer | RYUHMO</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#697586;--line:#e0e6ef;--blue:#24304a;--green:#1c9b78;--orange:#f47a18;--red:#c83e4d}
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#697586;--line:#e0e6ef;--green:#1c9b78;--orange:#f47a18}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-header{background:white;padding:24px max(20px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{background:white;padding:22px max(16px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line)}
 header a{color:var(--muted);text-decoration:none;font-size:13px}
-.brand{display:flex;gap:14px;align-items:center;margin-top:24px}
-.logo{width:52px;height:52px;flex-shrink:0;background:#111b32;color:white;border-radius:13px;display:grid;place-items:center;font-size:24px}
-h1{font-size:clamp(25px,4vw,35px);margin:0 0 6px}
+.brand{display:flex;align-items:center;gap:13px;margin-top:22px}
+.logo{width:50px;height:50px;display:grid;place-items:center;background:#111b32;color:white;border-radius:12px;font-size:24px}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 7px}
 h2{font-size:20px;margin:0 0 12px}
-h3{font-size:16px;margin:0 0 12px}
+h3{font-size:16px;margin:0}
 p{line-height:1.5}
-.sub{margin:0;color:var(--muted)}
+.sub,.small{color:var(--muted);font-size:13px;line-height:1.55}
+.sub{margin:0}
 main{max-width:1100px;margin:auto;padding:22px 16px 40px}
-.notice{background:#fff8f2;border:1px solid #f1d9c5;border-radius:14px;padding:16px;margin-bottom:24px}
-.notice strong{display:block;margin-bottom:7px}
-.small{font-size:13px;color:var(--muted);line-height:1.55}
-.panel,.doc-card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:20px}
-button,.button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:14px;display:inline-block}
-.primary{background:var(--orange);color:white}
-.secondary{background:#fff;border:1px solid var(--line);color:var(--text)}
-.green{background:#e5f7f0;color:#188667;border:1px solid #c6eadc}
+.notice{background:#fff8f2;border:1px solid #f1d9c5;border-radius:14px;padding:16px;margin-bottom:22px}
+.panel,.doc{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:20px}
+button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:14px}
 button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:var(--orange);color:white}
+.secondary{background:white;border:1px solid var(--line);color:var(--text)}
+.green{background:#e5f7f0;color:#188667;border:1px solid #c6eadc}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.status{font-size:13px;color:var(--muted);margin-top:12px;overflow-wrap:anywhere}
-.ok{color:var(--green)}.error{color:var(--red)}
-.folder-status{padding:11px 13px;border-radius:10px;background:#e5f7f0;color:#168b6b;font-size:13px}
-.stats{font-size:13px;color:var(--muted)}
-.docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.doc-card{min-width:0;margin:0;padding:16px}
-.number{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#111b32;color:white;font-weight:700;margin-right:8px}
-.doc-title{display:flex;align-items:center;margin-bottom:8px}
-label{display:block;font-size:12px;font-weight:700;color:#647084;margin:16px 0 7px;text-transform:uppercase;letter-spacing:.4px}
-select,input[type=text],input[type=number]{width:100%;min-width:0;border:1px solid var(--line);border-radius:9px;padding:11px;background:white;color:var(--text);font:inherit;font-size:14px}
-select:focus,input:focus{outline:2px solid #b9c9ff;outline-offset:1px}
-.preview{width:100%;height:115px;object-fit:contain;background:#f0f2f6;border-radius:9px;margin-top:12px}
-.file-info{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}
-.tag{display:inline-block;background:#eef2f8;padding:6px 8px;border-radius:7px;font-size:11px;margin-top:8px}
-.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.option{border:1px solid var(--line);border-radius:11px;padding:12px}
-.option label{margin-top:0}
-#process{font-size:15px;padding:15px 20px}
+.status{font-size:13px;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+.ok{color:var(--green)}.error{color:#bd3347}
+.folderstatus{padding:10px 12px;border-radius:9px;background:#e5f7f0;color:#168b6b;font-size:13px}
+.docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.doc{min-width:0;margin:0;padding:15px}
+.dochead{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.number{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#111b32;color:white;font-weight:bold;flex-shrink:0}
+label{display:block;font-size:12px;font-weight:bold;color:#647084;margin:15px 0 7px;text-transform:uppercase;letter-spacing:.3px}
+select,input[type=text],input[type=number]{width:100%;min-width:0;padding:11px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--text);font:inherit;font-size:14px}
+.preview{width:100%;height:120px;object-fit:contain;background:#f0f2f6;border-radius:9px;margin-top:12px}
+.fileinfo{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}
+.tag{display:inline-block;background:#eef2f8;padding:6px 8px;border-radius:7px;font-size:11px;margin-top:10px}
 .progress{height:7px;background:#edf0f5;border-radius:10px;overflow:hidden;margin-top:14px}
-.progress div{height:100%;width:0;background:var(--green);transition:width .2s}
+.progress div{height:100%;width:0;background:var(--green)}
 footer{text-align:center;font-size:12px;color:var(--muted);padding:25px}
-@media(max-width:800px){.docs{grid-template-columns:1fr}.doc-card{padding:15px}.preview{height:125px}.options{grid-template-columns:1fr}header{padding:20px 16px}}
+@media(max-width:780px){header{padding:18px 15px}.docs{grid-template-columns:1fr}main{padding:15px 10px 30px}.doc{padding:14px}}
 </style>
 </head>
 <body>
 <header>
- <a href="index.html">Home</a> &nbsp; › &nbsp; NIELIT Document Resizer
- <div class="brand">
-  <div class="logo">▧</div>
-  <div>
-   <h1>NIELIT Document Resizer</h1>
-   <p class="sub">Resize and compress Photo, Signature and Left Thumb Impression for NIELIT forms.</p>
-  </div>
- </div>
+<a href="index.html">Home</a> &nbsp; › &nbsp; NIELIT Document Resizer
+<div class="brand">
+<div class="logo">▧</div>
+<div>
+<h1>NIELIT Document Resizer</h1>
+<p class="sub">Automatically resize Photo, Signature and Left Thumb Impression.</p>
+</div>
+</div>
 </header>
 
 <main>
- <div class="notice">
-  <strong>Same-folder workflow — select a folder, assign three files, then process.</strong>
-  <div class="small">Passport Photo: 132 × 170 px (5–50 KB) · Signature: 170 × 132 px (5–20 KB) · Left Thumb: 170 × 132 px (5–20 KB). JPEG output with 150 DPI metadata.</div>
-  <div class="small" style="margin-top:6px">These are preset values. Confirm the exact requirements for your current NIELIT application.</div>
- </div>
+<div class="notice">
+<strong>Same-folder workflow</strong>
+<p class="small">Select a folder, assign three images, then process them together. Edited JPG files are saved in the same folder with an _edit suffix when folder writing is supported. Original files are preserved.</p>
+<p class="small">Configured defaults: Photo 132 × 170 px (5–50 KB); Signature 170 × 132 px (5–20 KB); Left Thumb 170 × 132 px (5–20 KB); 150 DPI. Verify the current NIELIT notice for your application.</p>
+</div>
 
- <section class="panel">
-  <h2>Step 1 — Select NIELIT folder</h2>
-  <p class="sub">Choose the folder containing your photo, signature and left thumb image. If supported, the browser will ask permission to write processed files into this folder.</p>
-  <div class="row" style="margin-top:15px">
-   <button id="chooseFolder" class="green">▣ Select Folder</button>
-   <button id="fallbackButton" class="secondary">Select images instead</button>
-   <input id="fallbackInput" type="file" accept="image/*" multiple hidden>
-   <span id="folderStatus" class="folder-status">No folder selected</span>
-   <span id="fileCount" class="stats">0 images found</span>
-  </div>
-  <p class="small">Folder writing requires browser support for the File System Access API. The “Select images instead” fallback can read files but cannot write back to their original folder.</p>
- </section>
+<section class="panel">
+<h2>Step 1 — Select NIELIT folder</h2>
+<p class="sub">Choose the folder containing your documents. Allow read/write access if your browser asks.</p>
+<div class="row" style="margin-top:15px">
+<button id="choose" class="green">▣ Select Folder</button>
+<button id="fallback" class="secondary">Select images instead</button>
+<input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+<span id="folderStatus" class="folderstatus">No folder selected</span>
+<span id="count" class="small">0 images found</span>
+</div>
+<p class="small">Direct folder saving requires browser support. If unsupported, the tool downloads the three JPG files separately. It will never claim a file was saved when it wasn't.</p>
+</section>
 
- <section style="margin-bottom:22px">
-  <h2>Step 2 — Assign the three files</h2>
-  <p id="assignHelp" class="small">Choose the correct image in each dropdown. The tool may suggest a file based on its filename; check each selection before processing.</p>
-  <div class="docs">
-   <article class="doc-card">
-    <div class="doc-title"><span class="number">1</span><h3>Passport Photo</h3></div>
-    <div class="small">132 × 170 px · 5–50 KB · JPG · 150 DPI</div>
-    <label for="photoSelect">File in folder</label>
-    <select id="photoSelect" disabled><option value="">Select folder first</option></select>
-    <img id="photoPreview" class="preview" alt="Passport photo preview" hidden>
-    <div id="photoInfo" class="file-info">No file selected</div>
-    <label for="photoName">Output filename</label>
-    <input id="photoName" type="text" value="Photo_edit" disabled>
-    <span class="tag">Auto-resize enabled</span>
-   </article>
+<section style="margin-bottom:22px">
+<h2>Step 2 — Assign the three files</h2>
+<p class="small">The tool suggests images based on filenames. Check each dropdown and select the correct source file.</p>
+<div class="docs">
+<article class="doc">
+<div class="dochead"><span class="number">1</span><h3>Passport Photo</h3></div>
+<p class="small">132 × 170 px · 5–50 KB · JPG · 150 DPI</p>
+<label for="photoSelect">File in folder</label>
+<select id="photoSelect" disabled><option value="">Select folder first</option></select>
+<img id="photoPreview" class="preview" alt="Photo preview" hidden>
+<div id="photoInfo" class="fileinfo">No file selected</div>
+<label for="photoName">Output filename</label>
+<input id="photoName" type="text" value="Photo_edit" disabled>
+</article>
 
-   <article class="doc-card">
-    <div class="doc-title"><span class="number">2</span><h3>Signature</h3></div>
-    <div class="small">170 × 132 px · 5–20 KB · JPG · 150 DPI</div>
-    <label for="signSelect">File in folder</label>
-    <select id="signSelect" disabled><option value="">Select folder first</option></select>
-    <img id="signPreview" class="preview" alt="Signature preview" hidden>
-    <div id="signInfo" class="file-info">No file selected</div>
-    <label for="signName">Output filename</label>
-    <input id="signName" type="text" value="Sign_edit" disabled>
-    <label class="small" style="text-transform:none;letter-spacing:0;font-weight:400">
-     <input id="trimSign" type="checkbox" checked> Trim white margins
-    </label>
-    <span class="tag">Auto-resize enabled</span>
-   </article>
+<article class="doc">
+<div class="dochead"><span class="number">2</span><h3>Signature</h3></div>
+<p class="small">170 × 132 px · 5–20 KB · JPG · 150 DPI</p>
+<label for="signSelect">File in folder</label>
+<select id="signSelect" disabled><option value="">Select folder first</option></select>
+<img id="signPreview" class="preview" alt="Signature preview" hidden>
+<div id="signInfo" class="fileinfo">No file selected</div>
+<label for="signName">Output filename</label>
+<input id="signName" type="text" value="Sign_edit" disabled>
+</article>
 
-   <article class="doc-card">
-    <div class="doc-title"><span class="number">3</span><h3>Left Thumb Impression</h3></div>
-    <div class="small">170 × 132 px · 5–20 KB · JPG · 150 DPI</div>
-    <label for="thumbSelect">File in folder</label>
-    <select id="thumbSelect" disabled><option value="">Select folder first</option></select>
-    <img id="thumbPreview" class="preview" alt="Thumb impression preview" hidden>
-    <div id="thumbInfo" class="file-info">No file selected</div>
-    <label for="thumbName">Output filename</label>
-    <input id="thumbName" type="text" value="Thumb_edit" disabled>
-    <label class="small" style="text-transform:none;letter-spacing:0;font-weight:400">
-     <input id="trimThumb" type="checkbox" checked> Trim white margins
-    </label>
-    <span class="tag">Auto-resize enabled</span>
-   </article>
-  </div>
- </section>
+<article class="doc">
+<div class="dochead"><span class="number">3</span><h3>Left Thumb Impression</h3></div>
+<p class="small">170 × 132 px · 5–20 KB · JPG · 150 DPI</p>
+<label for="thumbSelect">File in folder</label>
+<select id="thumbSelect" disabled><option value="">Select folder first</option></select>
+<img id="thumbPreview" class="preview" alt="Thumb preview" hidden>
+<div id="thumbInfo" class="fileinfo">No file selected</div>
+<label for="thumbName">Output filename</label>
+<input id="thumbName" type="text" value="Thumb_edit" disabled>
+</article>
+</div>
+</section>
 
- <section class="panel">
-  <h2>Step 3 — Process all three</h2>
-  <div class="options">
-   <div class="option">
-    <label for="dpi">Output DPI</label>
-    <input id="dpi" type="number" min="1" max="1200" value="150">
-   </div>
-   <div class="option">
-    <label for="cropFocus">Photo crop focus</label>
-    <select id="cropFocus">
-     <option value="center">Center</option>
-     <option value="top">Top</option>
-     <option value="bottom">Bottom</option>
-    </select>
-   </div>
-  </div>
-  <p class="small">The photo is center-cropped by default. Signature and thumb images can have white margins trimmed. Review the selected source images before processing.</p>
-  <div class="row" style="margin-top:16px">
-   <button id="process" class="primary" disabled>⇩ PROCESS & SAVE ALL 3</button>
-   <button id="reset" class="secondary">Reset selections</button>
-  </div>
-  <div class="progress"><div id="progressBar"></div></div>
-  <p id="result" class="status">Select a folder to begin.</p>
-  <div id="results"></div>
- </section>
+<section class="panel">
+<h2>Step 3 — Process all three</h2>
+<div style="max-width:420px">
+<label for="dpi">Output DPI</label>
+<input id="dpi" type="number" min="1" max="1200" value="150">
+<label for="focus">Photo crop focus</label>
+<select id="focus">
+<option value="center">Center</option>
+<option value="top">Top</option>
+<option value="bottom">Bottom</option>
+</select>
+</div>
+<p class="small">Images are automatically cropped to the required aspect ratio and compressed to try to meet the maximum KB limit. Quality cannot be guaranteed if a size target is too small.</p>
+<div class="row" style="margin-top:16px">
+<button id="process" class="primary" disabled>⇩ PROCESS & SAVE ALL 3</button>
+<button id="reset" class="secondary">Reset</button>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<p id="status" class="status">Select a folder to begin.</p>
+<div id="results"></div>
+</section>
 
- <section class="panel">
-  <h2>How saving works</h2>
-  <p class="small">When folder writing is available, the tool writes the processed images into the selected folder. It creates or updates the requested output filenames. It does not delete the selected source files automatically. This avoids losing originals if a conversion fails.</p>
-  <p class="small">If folder writing is unavailable, the tool will offer individual JPG downloads instead. It will not claim that files were saved to the folder when they were not.</p>
- </section>
- <footer>RYUHMO Digital Tools · NIELIT Document Resizer</footer>
+<section class="panel">
+<h2>Important</h2>
+<p class="small">The tool saves edited files with an _edit suffix and leaves original files unchanged. This avoids losing originals if a conversion fails. The app needs folder-write permission to save directly into the selected folder. Otherwise, each result downloads separately.</p>
+</section>
+<footer>RYUHMO Digital Tools · NIELIT Document Resizer</footer>
 </main>
 
 <script>
 'use strict';
-
 const $=id=>document.getElementById(id);
-const definitions=[
- {key:'photo',select:'photoSelect',preview:'photoPreview',info:'photoInfo',name:'photoName',type:'photo',w:132,h:170,min:5,max:50},
- {key:'sign',select:'signSelect',preview:'signPreview',info:'signInfo',name:'signName',type:'sign',w:170,h:132,min:5,max:20,trim:'trimSign'},
- {key:'thumb',select:'thumbSelect',preview:'thumbPreview',info:'thumbInfo',name:'thumbName',type:'thumb',w:170,h:132,min:5,max:20,trim:'trimThumb'}
+const docs=[
+ {key:'photo',select:'photoSelect',preview:'photoPreview',info:'photoInfo',name:'photoName',w:132,h:170,min:5,max:50},
+ {key:'sign',select:'signSelect',preview:'signPreview',info:'signInfo',name:'signName',w:170,h:132,min:5,max:20},
+ {key:'thumb',select:'thumbSelect',preview:'thumbPreview',info:'thumbInfo',name:'thumbName',w:170,h:132,min:5,max:20}
 ];
+let folderHandle=null, files=[], folderMode=false, busy=false, urls=[];
 
-let dirHandle=null;
-let files=[];
-let folderMode=false;
-let processing=false;
-let previewURLs=[];
-
-function status(message,kind=''){
- $('result').textContent=message;
- $('result').className='status '+kind;
+function say(message,type=''){
+ $('status').textContent=message;
+ $('status').className='status '+type;
 }
+function isImage(file){
+ return file && (/^image\/(jpeg|png|webp)$/i.test(file.type)||/\.(jpe?g|png|webp)$/i.test(file.name));
+}
+function sizeText(bytes){return bytes<1024?bytes+' B':(bytes/1024).toFixed(1)+' KB';}
 function cleanBase(name){
  let base=name.replace(/\.[^.]+$/,'').trim();
  if(/^WhatsApp\s+(Image|Video)/i.test(base))base='WhatsApp';
  else base=base.split(/\s+/)[0]||'Document';
  return base.replace(/[^\w-]+/g,'_')||'Document';
 }
-function readableSize(n){return n<1024?n+' B':(n/1024).toFixed(1)+' KB'}
 function guessType(name){
  if(/thumb|impression|\blti\b/i.test(name))return 'thumb';
  if(/sign|signature|\bsig\b/i.test(name))return 'sign';
  if(/photo|passport|\bpic\b/i.test(name))return 'photo';
  return '';
 }
-function supported(file){
- return file && (/^image\/(jpeg|png|webp)$/i.test(file.type)||/\.(jpe?g|png|webp)$/i.test(file.name));
+function safeName(name){
+ return (name||'Document_edit').trim().replace(/\.jpe?g$/i,'')
+ .replace(/[<>:"/\\|?*\x00-\x1F]/g,'_').replace(/\s+/g,'_').slice(0,120)||'Document_edit';
 }
-function revokePreviews(){
- previewURLs.forEach(URL.revokeObjectURL);
- previewURLs=[];
+function clearUrls(){urls.forEach(u=>URL.revokeObjectURL(u));urls=[];}
+function setEnabled(on){
+ docs.forEach(d=>{$(d.select).disabled=!on;$(d.name).disabled=!on;});
+ $('process').disabled=!on||busy;
 }
-function setEnabled(enabled){
- definitions.forEach(d=>{
-  $(d.select).disabled=!enabled;
-  $(d.name).disabled=!enabled;
- });
- $('process').disabled=!enabled||processing;
+function entryFile(entry){return entry && entry.file instanceof File ? entry.file : null;}
+
+function updateCard(d){
+ const value=$(d.select).value;
+ const entry=value===''?null:files[Number(value)];
+ const file=entryFile(entry);
+ const img=$(d.preview);
+ if(!file){
+  img.hidden=true;img.removeAttribute('src');
+  $(d.info).textContent='No file selected';
+  return;
+ }
+ const url=URL.createObjectURL(file);
+ urls.push(url);
+ img.src=url;img.hidden=false;
+ $(d.info).textContent=file.name+' · '+sizeText(file.size);
+ if(!$(d.name).dataset.custom)$(d.name).value=cleanBase(file.name)+'_edit';
 }
-function safeOutputName(value){
- return (value||'Document_edit').trim()
-  .replace(/\.[^.]+$/,'')
-  .replace(/[<>:"/\\|?*\x00-\x1F]/g,'_')
-  .replace(/\s+/g,'_').slice(0,120)||'Document_edit';
+function checkReady(){
+ const values=docs.map(d=>$(d.select).value);
+ const ready=values.every(v=>v!=='')&&new Set(values).size===3;
+ $('process').disabled=!ready||busy;
+ if(values.every(v=>v!=='')&&!ready)say('Please select three different source images.','error');
+ return ready;
 }
-function makeSelectOptions(d,guess){
+function populate(d,guess=true){
  const select=$(d.select);
- select.innerHTML='';
- const placeholder=document.createElement('option');
- placeholder.value='';placeholder.textContent='— Select file —';
- select.appendChild(placeholder);
- files.forEach((f,i)=>{
-  const op=document.createElement('option');
-  op.value=String(i);
-  op.textContent=f.name;
-  select.appendChild(op);
+ select.innerHTML='<option value="">— Select file —</option>';
+ files.forEach((entry,i)=>{
+  const file=entryFile(entry);
+  if(!file)return;
+  const option=document.createElement('option');
+  option.value=String(i);
+  option.textContent=file.name;
+  select.appendChild(option);
  });
  if(guess){
-  const match=files.findIndex(f=>guessType(f.name)===d.type);
-  if(match>=0)select.value=String(match);
-  else if(files.length===1)select.value='0';
+  const i=files.findIndex(entry=>guessType(entry.name||entry.file.name)===d.key);
+  if(i>=0)select.value=String(i);
+  else if(files.length===3){
+   const used=docs.filter(other=>other!==d).map(other=>$(other.select).value);
+   const free=files.findIndex((entry,j)=>!used.includes(String(j)));
+   if(free>=0)select.value=String(free);
+  }
  }
  updateCard(d);
 }
-function updateCard(d){
- const value=$(d.select).value;
- const file=value===''?null:files[Number(value)];
- const img=$(d.preview),info=$(d.info);
- if(!file){
-  img.hidden=true;img.removeAttribute('src');
-  info.textContent='No file selected';
-  $(d.name).value=d.key==='photo'?'Photo_edit':d.key==='sign'?'Sign_edit':'Thumb_edit';
-  return;
- }
- const url=URL.createObjectURL(file);previewURLs.push(url);
- img.src=url;img.hidden=false;
- info.textContent=file.name+' · '+readableSize(file.size);
- const defaultBase=cleanBase(file.name);
- if(!$(d.name).dataset.custom)$(d.name).value=defaultBase+'_edit';
-}
-definitions.forEach(d=>{
+docs.forEach(d=>{
  $(d.select).addEventListener('change',()=>{
   $(d.name).dataset.custom='';
-  updateCard(d);
-  checkReady();
+  updateCard(d);checkReady();
  });
  $(d.name).addEventListener('input',()=>{$(d.name).dataset.custom='1';});
 });
 
-function checkReady(){
- const selected=definitions.map(d=>$(d.select).value);
- const all=selected.every(v=>v!=='');
- const unique=new Set(selected).size===3;
- const valid=all&&unique;
- $('process').disabled=!valid||processing;
- if(all&&!unique)status('Please select three different source images.','error');
- else if(valid)status(folderMode?'All three files selected. Ready to process and save.':'Images selected. Output will be downloaded separately because folder writing is unavailable.','ok');
- return valid;
-}
-async function walkDirectory(handle){
- const out=[];
- for await(const [name,entry] of handle.entries()){
-  if(entry.kind==='file'){
-   const file=await entry.getFile();
-   if(supported(file))out.push({name,handle:entry,file});
-  }
- }
- return out;
-}
 async function chooseFolder(){
  if(!window.showDirectoryPicker){
-  status('This browser does not support direct folder access. Use Select images instead, or open the page in a browser that supports folder access.','error');
-  $('fallbackInput').click();
-  return;
+  say('This browser does not support direct folder access. Choose images instead, or open this page in a supported desktop browser.','error');
+  $('fileInput').click();return;
  }
  try{
-  dirHandle=await window.showDirectoryPicker({mode:'readwrite'});
-  folderMode=true;
-  status('Reading folder…');
-  files=await walkDirectory(dirHandle);
-  revokePreviews();
-  $('folderStatus').textContent='Selected folder: '+dirHandle.name;
-  $('folderStatus').className='folder-status';
-  $('fileCount').textContent=files.length+' images found';
-  if(!files.length){
-   setEnabled(false);
-   status('No supported JPG, PNG or WebP images found in this folder.','error');
-   return;
+  const handle=await window.showDirectoryPicker({mode:'readwrite'});
+  folderHandle=handle;folderMode=true;
+  say('Reading selected folder…');
+  const found=[];
+  for await(const [name,entry] of handle.entries()){
+   if(entry.kind!=='file')continue;
+   const file=await entry.getFile();
+   if(isImage(file))found.push({name,handle:entry,file});
   }
-  definitions.forEach(d=>makeSelectOptions(d,true));
-  setEnabled(true);
-  checkReady();
+  files=found;
+  clearUrls();
+  $('folderStatus').textContent='Selected folder: '+handle.name+' · write access requested';
+  $('count').textContent=files.length+' images found';
+  if(!files.length){
+   setEnabled(false);say('No supported JPG, PNG or WebP images found.','error');return;
+  }
+  docs.forEach(d=>populate(d,true));
+  setEnabled(true);checkReady();
+  say('Folder loaded. Confirm the three dropdown selections.','ok');
  }catch(e){
-  if(e.name!=='AbortError')status('Could not access folder: '+e.message,'error');
+  if(e.name!=='AbortError')say('Could not access folder: '+e.message,'error');
  }
 }
-$('chooseFolder').addEventListener('click',chooseFolder);
+$('choose').addEventListener('click',chooseFolder);
 
-$('fallbackButton').addEventListener('click',()=>$('fallbackInput').click());
-$('fallbackInput').addEventListener('change',()=>{
- dirHandle=null;folderMode=false;
- revokePreviews();
- files=Array.from($('fallbackInput').files||[])
-  .filter(supported).map(file=>({name:file.name,file,handle:null}));
- $('folderStatus').textContent='Images selected (read-only source)';
- $('fileCount').textContent=files.length+' images found';
- if(!files.length){
-  setEnabled(false);status('No supported image files selected.','error');return;
- }
- definitions.forEach(d=>makeSelectOptions(d,true));
- setEnabled(true);
- checkReady();
+$('fallback').addEventListener('click',()=>$('fileInput').click());
+$('fileInput').addEventListener('change',()=>{
+ clearUrls();folderHandle=null;folderMode=false;
+ files=Array.from($('fileInput').files||[]).filter(isImage).map(file=>({name:file.name,file,handle:null}));
+ $('folderStatus').textContent='Images selected — folder write unavailable';
+ $('count').textContent=files.length+' images found';
+ if(!files.length){setEnabled(false);say('No supported images selected.','error');return;}
+ docs.forEach(d=>populate(d,true));
+ setEnabled(true);checkReady();
+ say('Images loaded. Results will download separately.','ok');
 });
 
 function loadImage(file){
  return new Promise((resolve,reject)=>{
-  const url=URL.createObjectURL(file);
-  const img=new Image();
+  const url=URL.createObjectURL(file),img=new Image();
   img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
-  img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Unable to open '+file.name));};
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Could not read '+file.name));};
   img.src=url;
  });
 }
-function canvasBlob(canvas,q){
+function toBlob(canvas,q){
  return new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',q));
 }
-function trimBounds(img){
+function findContentBounds(img){
  const c=document.createElement('canvas');
- c.width=Math.min(img.naturalWidth,1200);
- c.height=Math.min(img.naturalHeight,1200);
+ const scale=Math.min(1,900/img.naturalWidth,900/img.naturalHeight);
+ c.width=Math.max(1,Math.round(img.naturalWidth*scale));
+ c.height=Math.max(1,Math.round(img.naturalHeight*scale));
  const x=c.getContext('2d',{willReadFrequently:true});
+ x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
  x.drawImage(img,0,0,c.width,c.height);
  const data=x.getImageData(0,0,c.width,c.height).data;
  let minX=c.width,minY=c.height,maxX=-1,maxY=-1;
- for(let y=0;y<c.height;y+=2){
-  for(let xx=0;xx<c.width;xx+=2){
-   const p=(y*c.width+xx)*4;
-   const r=data[p],g=data[p+1],b=data[p+2];
-   if(Math.min(r,g,b)<232){
-    minX=Math.min(minX,xx);minY=Math.min(minY,y);
-    maxX=Math.max(maxX,xx);maxY=Math.max(maxY,y);
-   }
+ for(let y=0;y<c.height;y+=2)for(let xx=0;xx<c.width;xx+=2){
+  const p=(y*c.width+xx)*4;
+  if(Math.min(data[p],data[p+1],data[p+2])<232){
+   minX=Math.min(minX,xx);minY=Math.min(minY,y);
+   maxX=Math.max(maxX,xx);maxY=Math.max(maxY,y);
   }
  }
  if(maxX<0)return {x:0,y:0,w:img.naturalWidth,h:img.naturalHeight};
  const sx=img.naturalWidth/c.width,sy=img.naturalHeight/c.height;
- const pad=0.025;
- let x0=Math.max(0,minX/c.width-pad),y0=Math.max(0,minY/c.height-pad);
- let x1=Math.min(1,(maxX+1)/c.width+pad),y1=Math.min(1,(maxY+1)/c.height+pad);
- return {x:x0*img.naturalWidth,y:y0*img.naturalHeight,w:(x1-x0)*img.naturalWidth,h:(y1-y0)*img.naturalHeight};
+ const padX=2*sx,padY=2*sy;
+ const x0=Math.max(0,minX*sx-padX),y0=Math.max(0,minY*sy-padY);
+ const x1=Math.min(img.naturalWidth,(maxX+1)*sx+padX);
+ const y1=Math.min(img.naturalHeight,(maxY+1)*sy+padY);
+ return {x:x0,y:y0,w:x1-x0,h:y1-y0};
 }
 function cropRect(img,d,trim){
- let bounds={x:0,y:0,w:img.naturalWidth,h:img.naturalHeight};
- if(trim)bounds=trimBounds(img);
+ let b=trim?findContentBounds(img):{x:0,y:0,w:img.naturalWidth,h:img.naturalHeight};
  const ratio=d.w/d.h;
- let w=bounds.w,h=bounds.h;
+ let w=b.w,h=b.h;
  if(w/h>ratio)w=h*ratio;else h=w/ratio;
- const focus=$('cropFocus').value;
- const x=bounds.x+(bounds.w-w)/2;
- let y=bounds.y+(bounds.h-h)/2;
- if(focus==='top')y=bounds.y;
- if(focus==='bottom')y=bounds.y+bounds.h-h;
+ let x=b.x+(b.w-w)/2,y=b.y+(b.h-h)/2;
+ if(d.key==='photo'){
+  const focus=$('focus').value;
+  if(focus==='top')y=b.y;
+  if(focus==='bottom')y=b.y+b.h-h;
+ }
  return {x,y,w,h};
 }
-async function setJpegDpi(blob,dpi){
+async function withDpi(blob,dpi){
  const buf=await blob.arrayBuffer();
  const src=new Uint8Array(buf);
+ if(src[0]!==255||src[1]!==216)return blob;
  const d=Math.max(1,Math.min(65535,Math.round(dpi)));
- // Add a JFIF APP0 header with density values to the JPEG stream.
- if(src[0]!==0xFF||src[1]!==0xD8)return blob;
- const header=new Uint8Array([
-  0xFF,0xE0,0x00,0x10,0x4A,0x46,0x49,0x46,0x00,0x01,0x02,0x01,
-  (d>>8)&255,d&255,(d>>8)&255,d&255,0x00,0x00
- ]);
+ // Add a JFIF density header to the JPEG data.
+ const header=new Uint8Array([255,224,0,16,74,70,73,70,0,1,2,1,(d>>8)&255,d&255,(d>>8)&255,d&255,0,0]);
  return new Blob([src.slice(0,2),header,src.slice(2)],{type:'image/jpeg'});
 }
-async function renderOutput(file,d){
+async function makeOutput(file,d){
+ const dpi=Number($('dpi').value);
+ if(!Number.isFinite(dpi)||dpi<1||dpi>1200)throw new Error('DPI must be 1–1200.');
  const img=await loadImage(file);
- const canvas=document.createElement('canvas');
- canvas.width=d.w;canvas.height=d.h;
- const ctx=canvas.getContext('2d',{alpha:false});
+ const c=document.createElement('canvas');c.width=d.w;c.height=d.h;
+ const ctx=c.getContext('2d',{alpha:false});
  ctx.fillStyle='#fff';ctx.fillRect(0,0,d.w,d.h);
  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
- const trim=d.trim?$(d.trim).checked:false;
+ const trim=d.key!=='photo';
  const r=cropRect(img,d,trim);
  ctx.drawImage(img,r.x,r.y,r.w,r.h,0,0,d.w,d.h);
- let lo=.08,hi=.98,best=null;
- for(let i=0;i<13;i++){
-  const q=(lo+hi)/2;
-  const blob=await canvasBlob(canvas,q);
-  if(!blob)throw new Error('JPEG export failed.');
-  if(blob.size<=d.max*1024){best=blob;lo=q;}else hi=q;
+ let low=.06,high=.98,best=null;
+ for(let i=0;i<14;i++){
+  const q=(low+high)/2,blob=await toBlob(c,q);
+  if(!blob)throw new Error('JPEG conversion failed.');
+  if(blob.size<=d.max*1024){best=blob;low=q;}else high=q;
  }
- if(!best)best=await canvasBlob(canvas,.08);
- best=await setJpegDpi(best,Number($('dpi').value)||150);
- return {blob:best,min:d.min,max:d.max,w:d.w,h:d.h};
+ if(!best)best=await toBlob(c,.06);
+ const blob=await withDpi(best,dpi);
+ return {blob,kb:blob.size/1024};
 }
-async function writeFileToFolder(name,blob){
- const handle=await dirHandle.getFileHandle(name,{create:true});
- const writable=await handle.createWritable();
- await writable.write(blob);
- await writable.close();
- const check=await handle.getFile();
- if(check.size!==blob.size)throw new Error('Verification failed for '+name);
- return check.size;
+async function saveIntoFolder(name,blob){
+ const handle=await folderHandle.getFileHandle(name,{create:true});
+ const stream=await handle.createWritable();
+ await stream.write(blob);
+ await stream.close();
+ const verify=await handle.getFile();
+ if(verify.size!==blob.size)throw new Error('Could not verify saved file '+name);
+ return verify;
 }
-function downloadBlob(name,blob){
+function download(name,blob){
  const url=URL.createObjectURL(blob);
  const a=document.createElement('a');
  a.href=url;a.download=name;
@@ -431,82 +380,80 @@ function downloadBlob(name,blob){
  setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 $('process').addEventListener('click',async()=>{
- if(processing||!checkReady())return;
- const dpi=Number($('dpi').value);
- if(!Number.isFinite(dpi)||dpi<1||dpi>1200){
-  status('DPI must be between 1 and 1200.','error');return;
- }
- processing=true;$('process').disabled=true;
- $('results').innerHTML='';
- $('progressBar').style.width='0%';
- const outputs=[];
+ if(busy||!checkReady())return;
+ busy=true;$('process').disabled=true;
+ $('results').innerHTML='';$('bar').style.width='0%';
  try{
-  for(let i=0;i<definitions.length;i++){
-   const d=definitions[i];
-   const idx=Number($(d.select).value);
-   const source=files[idx];
-   if(!source)throw new Error('Select a source for '+d.key+'.');
-   status('Processing '+(i+1)+' of 3: '+source.name+'…');
-   const result=await renderOutput(source.file,d);
-   const kb=result.blob.size/1024;
-   const outputName=safeOutputName($(d.name).value)+'.jpg';
-   outputs.push({d,source,result,outputName,kb});
-   $('progressBar').style.width=((i+1)/3*70)+'%';
+  const outputs=[];
+  for(let i=0;i<docs.length;i++){
+   const d=docs[i],entry=files[Number($(d.select).value)];
+   const file=entryFile(entry);
+   if(!file)throw new Error('The selected file is unavailable for '+d.key+'.');
+   say('Processing '+(i+1)+' of 3: '+file.name+'…');
+   const result=await makeOutput(file,d);
+   const name=safeName($(d.name).value)+ '_edit.jpg';
+   // Avoid appending _edit twice if the user already entered it.
+   const finalName=safeName($(d.name).value).replace(/_edit$/i,'')+'_edit.jpg';
+   outputs.push({d,result,name:finalName});
+   $('bar').style.width=((i+1)/3*65)+'%';
   }
-  if(folderMode&&dirHandle){
-   // Write and verify all output files first. Do not delete source files.
+
+  if(folderMode&&folderHandle){
+   // Ensure permission still exists before writing.
+   let permission=await folderHandle.queryPermission({mode:'readwrite'});
+   if(permission!=='granted')permission=await folderHandle.requestPermission({mode:'readwrite'});
+   if(permission!=='granted')throw new Error('Folder write permission was not granted.');
    for(let i=0;i<outputs.length;i++){
     const o=outputs[i];
-    status('Saving '+(i+1)+' of 3: '+o.outputName+'…');
-    await writeFileToFolder(o.outputName,o.result.blob);
-    $('progressBar').style.width=(70+(i+1)/3*30)+'%';
+    say('Saving '+(i+1)+' of 3: '+o.name+'…');
+    await saveIntoFolder(o.name,o.result.blob);
+    const within=o.result.kb>=o.d.min&&o.result.kb<=o.d.max;
+    const p=document.createElement('p');
+    p.className='status '+(within?'ok':'error');
+    p.textContent=o.name+' — '+o.d.w+' × '+o.d.h+' px, '+o.result.kb.toFixed(2)+' KB. '+(within?'Saved and verified.':'Saved, but outside the target size range.');
+    $('results').appendChild(p);
+    $('bar').style.width=(65+(i+1)/3*35)+'%';
    }
-   outputs.forEach(o=>{
-    const within=o.kb>=o.result.min&&o.kb<=o.result.max;
-    const div=document.createElement('p');
-    div.className='status '+(within?'ok':'error');
-    div.textContent=o.outputName+' — '+o.result.w+' × '+o.result.h+' px, '+o.kb.toFixed(2)+' KB. '+(within?'Saved and verified.':'Saved, but size is outside the requested range.');
-    $('results').appendChild(div);
-   });
-   status('Finished. Files were written to the selected folder. Original source files were not deleted.','ok');
-   files=await walkDirectory(dirHandle);
-   revokePreviews();
-   definitions.forEach(d=>makeSelectOptions(d,false));
-   $('fileCount').textContent=files.length+' images found';
+   say('Completed. Edited images are in the selected folder. Originals were preserved.','ok');
+   const fresh=[];
+   for await(const [name,entry] of folderHandle.entries()){
+    if(entry.kind!=='file')continue;
+    const file=await entry.getFile();
+    if(isImage(file))fresh.push({name,handle:entry,file});
+   }
+   files=fresh;
+   clearUrls();
+   $('count').textContent=files.length+' images found';
+   docs.forEach(d=>populate(d,false));
   }else{
    outputs.forEach(o=>{
-    downloadBlob(o.outputName,o.result.blob);
-    const within=o.kb>=o.result.min&&o.kb<=o.result.max;
-    const div=document.createElement('p');
-    div.className='status '+(within?'ok':'error');
-    div.textContent=o.outputName+' — '+o.kb.toFixed(2)+' KB. '+(within?'Download started.':'Download started, but size is outside the requested range.');
-    $('results').appendChild(div);
+    download(o.name,o.result.blob);
+    const within=o.result.kb>=o.d.min&&o.result.kb<=o.d.max;
+    const p=document.createElement('p');
+    p.className='status '+(within?'ok':'error');
+    p.textContent=o.name+' — '+o.result.kb.toFixed(2)+' KB. '+(within?'Download started.':'Downloaded, but outside the target size range.');
+    $('results').appendChild(p);
    });
-   status('Processing finished. Your browser downloaded the images separately. This browser cannot write them back into the selected folder.','ok');
+   $('bar').style.width='100%';
+   say('Processed. Your browser downloaded each JPG separately; it cannot save directly into the folder.','ok');
   }
- }catch(e){
-  status('Processing stopped: '+e.message,'error');
- }finally{
-  processing=false;
-  $('process').disabled=!checkReady();
- }
+ }catch(e){say('Could not complete: '+e.message,'error');}
+ finally{busy=false;checkReady();}
 });
 $('reset').addEventListener('click',()=>{
- if(processing)return;
- revokePreviews();files=[];dirHandle=null;folderMode=false;
- $('fallbackInput').value='';
+ if(busy)return;
+ clearUrls();files=[];folderHandle=null;folderMode=false;
+ $('fileInput').value='';
  $('folderStatus').textContent='No folder selected';
- $('fileCount').textContent='0 images found';
- $('results').innerHTML='';
- $('progressBar').style.width='0%';
- definitions.forEach(d=>{
+ $('count').textContent='0 images found';
+ $('results').innerHTML='';$('bar').style.width='0%';
+ docs.forEach(d=>{
   $(d.select).innerHTML='<option value="">Select folder first</option>';
   $(d.select).disabled=true;$(d.name).disabled=true;
   $(d.preview).hidden=true;$(d.info).textContent='No file selected';
   $(d.name).dataset.custom='';
  });
- setEnabled(false);
- status('Select a folder to begin.');
+ setEnabled(false);say('Select a folder to begin.');
 });
 setEnabled(false);
 </script>
