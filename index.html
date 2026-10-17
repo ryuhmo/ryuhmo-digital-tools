@@ -186,6 +186,197 @@ pdf+=`trailer\n<< /Size ${objects.length+1} /Root ${catalog} 0 R >>\nstartxref\n
 const blob=new Blob([pdf],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='ryuhmo-images.pdf';a.click();msg.textContent='Your PDF download has started.';setTimeout(()=>URL.revokeObjectURL(url),1500);
 }catch(e){msg.textContent='PDF creation failed. Please try another image.';}
 }
+  
+/* RYUHMO IMAGE RESIZER: CROP + DPI */
+var ryCropImage = null;
+var ryCropRect = null;
+var ryCropDrag = null;
+
+function openTool(type) {
+  const area = document.getElementById('workspace');
+  area.classList.remove('hidden');
+
+  if (type === 'image') {
+    area.innerHTML = `
+      <h2>Image Resizer</h2>
+      <p>Select an image, then drag on the preview to crop it.</p>
+      <label>Choose image</label>
+      <input id="imgfile" type="file" accept="image/*"
+        onchange="loadCropImage(this.files[0])">
+      <div style="margin:12px 0">
+        <label>Output width (px)</label>
+        <input id="iw" type="number" value="132" min="1">
+        <label>Output height (px)</label>
+        <input id="ih" type="number" value="170" min="1">
+        <label>DPI</label>
+        <input id="idpi" type="number" value="150" min="1" max="1200">
+      </div>
+      <canvas id="cropPreview"
+        style="display:block;max-width:100%;height:auto;touch-action:none;border:1px solid #888">
+      </canvas>
+      <p id="imgmsg">Choose an image to begin.</p>
+      <button onclick="resizeImage()">Crop and Resize</button>
+      <canvas id="canvas" hidden></canvas>
+    `;
+  } else if (type === 'pdf') {
+    area.innerHTML = `
+      <h2>JPG to PDF</h2>
+      <p>Select one or more images to combine into a PDF document.</p>
+      <input id="pdffiles" type="file" accept="image/*" multiple>
+      <label>PDF page size</label>
+      <select id="pagesize">
+        <option value="a4">A4</option>
+        <option value="fit">Fit to image</option>
+      </select>
+      <p id="pdfmsg"></p>
+      <button onclick="makePDF()">Create PDF</button>
+    `;
+  } else {
+    comingSoon();
+  }
+
+  area.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function loadCropImage(file) {
+  if (!file) return;
+
+  const msg = document.getElementById('imgmsg');
+  const img = new Image();
+  img.onload = function() {
+    ryCropImage = img;
+    ryCropRect = null;
+    const c = document.getElementById('cropPreview');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    drawCropPreview();
+    msg.textContent =
+      'Drag across the image to select the crop area.';
+  };
+  img.onerror = function() {
+    msg.textContent = 'Could not read this image.';
+  };
+  img.src = URL.createObjectURL(file);
+
+  const c = document.getElementById('cropPreview');
+  c.onpointerdown = function(e) {
+    if (!ryCropImage) return;
+    e.preventDefault();
+    c.setPointerCapture(e.pointerId);
+    const p = cropPoint(e, c);
+    ryCropDrag = {x:p.x, y:p.y};
+    ryCropRect = {x:p.x, y:p.y, w:0, h:0};
+    drawCropPreview();
+  };
+  c.onpointermove = function(e) {
+    if (!ryCropDrag) return;
+    const p = cropPoint(e, c);
+    ryCropRect = {
+      x:Math.min(ryCropDrag.x,p.x),
+      y:Math.min(ryCropDrag.y,p.y),
+      w:Math.abs(p.x-ryCropDrag.x),
+      h:Math.abs(p.y-ryCropDrag.y)
+    };
+    drawCropPreview();
+  };
+  c.onpointerup = function() {
+    ryCropDrag = null;
+  };
+  c.onpointercancel = function() {
+    ryCropDrag = null;
+  };
+}
+
+function cropPoint(e, c) {
+  const r = c.getBoundingClientRect();
+  return {
+    x:Math.max(0,Math.min(c.width,
+      (e.clientX-r.left)*c.width/r.width)),
+    y:Math.max(0,Math.min(c.height,
+      (e.clientY-r.top)*c.height/r.height))
+  };
+}
+
+function drawCropPreview() {
+  const c = document.getElementById('cropPreview');
+  if (!c || !ryCropImage) return;
+  const x = c.getContext('2d');
+  x.clearRect(0,0,c.width,c.height);
+  x.drawImage(ryCropImage,0,0);
+  if (ryCropRect && ryCropRect.w > 2 && ryCropRect.h > 2) {
+    x.fillStyle = 'rgba(0,0,0,0.35)';
+    x.fillRect(0,0,c.width,c.height);
+    x.clearRect(ryCropRect.x,ryCropRect.y,
+      ryCropRect.w,ryCropRect.h);
+    x.drawImage(ryCropImage,
+      ryCropRect.x,ryCropRect.y,ryCropRect.w,ryCropRect.h,
+      ryCropRect.x,ryCropRect.y,ryCropRect.w,ryCropRect.h);
+    x.strokeStyle = '#00ff88';
+    x.lineWidth = Math.max(2,c.width/400);
+    x.strokeRect(ryCropRect.x,ryCropRect.y,
+      ryCropRect.w,ryCropRect.h);
+  }
+}
+
+async function resizeImage() {
+  const f = document.getElementById('imgfile').files[0];
+  const w = Number(document.getElementById('iw').value);
+  const h = Number(document.getElementById('ih').value);
+  const dpi = Number(document.getElementById('idpi').value);
+  const msg = document.getElementById('imgmsg');
+
+  if (!f || !ryCropImage || w < 1 || h < 1 ||
+      dpi < 1 || dpi > 1200) {
+    msg.textContent =
+      'Choose an image and enter valid dimensions and DPI (1–1200).';
+    return;
+  }
+
+  try {
+    let r = ryCropRect;
+    if (!r || r.w < 2 || r.h < 2) {
+      r = {x:0,y:0,w:ryCropImage.naturalWidth,
+        h:ryCropImage.naturalHeight};
+    }
+
+    const c = document.getElementById('canvas');
+    c.width = Math.round(w);
+    c.height = Math.round(h);
+    c.getContext('2d').drawImage(
+      ryCropImage,r.x,r.y,r.w,r.h,0,0,c.width,c.height
+    );
+
+    const jpg = await new Promise(resolve =>
+      c.toBlob(resolve,'image/jpeg',0.92)
+    );
+    if (!jpg) throw new Error('Image export failed');
+
+    const buf = new Uint8Array(await jpg.arrayBuffer());
+    const hi = (dpi >> 8) & 255;
+    const lo = dpi & 255;
+    const jfif = new Uint8Array([
+      255,224,0,16,74,70,73,70,0,1,2,1,
+      1,hi,lo,hi,lo,0,0
+    ]);
+    const output = new Blob(
+      [buf.slice(0,2),jfif,buf.slice(2)],
+      {type:'image/jpeg'}
+    );
+
+    const url = URL.createObjectURL(output);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resized.jpg';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url),3000);
+    msg.textContent =
+      'Done! Saved as resized.jpg at ' + w + ' × ' + h +
+      ' pixels, with ' + dpi + ' DPI metadata.';
+  } catch (e) {
+    msg.textContent = 'Could not resize this image. Try another image.';
+  }
+}
+
 </script>
 </body>
 </html>
