@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,325 +7,230 @@
 <meta name="theme-color" content="#101329">
 <meta name="description" content="RYUHMO Digital Tools — free and useful online tools for images and documents.">
 <title>RYUHMO Digital Tools</title>
+
 <style>
-:root{--bg:#0d1020;--panel:#171b32;--text:#f7f8ff;--muted:#b2b8d0;--green:#a5e34b;--line:rgba(255,255,255,.11);--blue:#7c83ff}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}
-header{height:76px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(13,16,32,.94);position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
-.logo{font-size:22px;font-weight:900;letter-spacing:-.7px}.logo span{color:var(--green)}.nav{font-size:14px;color:#e4e7f4}.nav b{color:var(--green);margin-left:6px}
-.hero{padding:78px 20px 60px;text-align:center;background:radial-gradient(ellipse at 15% 15%,rgba(99,72,235,.45),transparent 45%),radial-gradient(ellipse at 85% 30%,rgba(17,171,194,.28),transparent 40%),linear-gradient(135deg,#171632,#111c37 55%,#102a38);border-bottom:1px solid var(--line)}
-.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(165,227,75,.4);background:rgba(165,227,75,.09);color:#c4f58a;padding:7px 13px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:1.3px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-h1{font-size:clamp(35px,7vw,64px);line-height:1.13;letter-spacing:-2px;max-width:790px;margin:24px auto 18px}.gradient-text{background:linear-gradient(90deg,#b9f36e,#69e5df,#a8a0ff);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:590px;margin:0 auto;color:#c4c9df;font-size:17px}
-.search-wrap{max-width:530px;margin:30px auto 0;position:relative}.search-wrap input{width:100%;padding:16px 19px 16px 48px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(8,13,29,.65);color:white;font-size:15px;outline:none}.search-wrap input:focus{border-color:var(--green)}.search-icon{position:absolute;left:17px;top:12px;font-size:22px;color:#bdc6e3}
-main{max-width:1120px;margin:auto;padding:55px 22px 75px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:27px}h2{font-size:29px;letter-spacing:-.7px;line-height:1.25;margin:0}.section-head p{color:var(--muted);margin:8px 0 0;font-size:14px}.count{color:#c9f79b;font-size:12px;font-weight:700;background:rgba(165,227,75,.1);padding:7px 11px;border-radius:25px;white-space:nowrap}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.card{position:relative;overflow:hidden;padding:25px;border-radius:20px;background:linear-gradient(145deg,rgba(29,37,67,.97),rgba(20,26,47,.97));border:1px solid var(--line);display:flex;flex-direction:column;min-height:250px;transition:transform .2s,border-color .2s}.card:before{content:"";position:absolute;width:150px;height:150px;right:-85px;top:-85px;border-radius:50%;background:var(--glow,rgba(111,94,246,.2));filter:blur(6px)}.card:hover{transform:translateY(-3px);border-color:rgba(165,227,75,.5)}.icon-box{position:relative;display:grid;place-items:center;width:53px;height:53px;border-radius:15px;background:var(--iconbg,rgba(126,106,255,.16));border:1px solid rgba(255,255,255,.09);font-size:26px}.card h3{font-size:20px;line-height:1.3;margin:20px 0 8px}.card p{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 22px;flex:1}
-.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;background:var(--green);color:#15210c;border:0;border-radius:11px;padding:12px 15px;font-size:14px;font-weight:800;cursor:pointer;width:100%}.btn:hover{background:#b8f66a}.btn.alt{background:#242c49;color:#e8ebff;border:1px solid rgba(255,255,255,.12)}.btn.alt:hover{border-color:var(--green)}
-.notice{margin-top:28px;padding:22px;border:1px solid var(--line);background:linear-gradient(110deg,rgba(110,82,235,.12),rgba(20,181,194,.07));border-radius:16px;color:var(--muted);font-size:14px}.notice strong{color:white}
-.workspace{margin-top:30px;padding:clamp(15px,3vw,25px);background:#171b32;border:1px solid var(--line);border-radius:18px;scroll-margin-top:90px}.workspace h2{font-size:24px;margin-bottom:10px}.workspace p{color:var(--muted)}.workspace label{display:block;margin:12px 0 5px;font-size:14px;color:#e5e9ff}.workspace input,.workspace select,.workspace textarea{width:100%;max-width:100%;padding:11px;border-radius:9px;border:1px solid #3a4565;background:#10152a;color:white;margin:3px 0}.workspace input[type=file]{padding:9px}.workspace input[type=checkbox]{width:auto}.workspace .btn{margin-top:12px}.workspace canvas{display:block;max-width:100%;height:auto}.control-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.control-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.crop-shell{margin:14px 0;padding:10px;border:1px solid #3a4565;border-radius:13px;background:#0d1225}.crop-stage{position:relative;display:flex;justify-content:center;align-items:center;min-height:140px;overflow:hidden;touch-action:pan-y}.crop-stage canvas{max-height:58vh;object-fit:contain;touch-action:none;border-radius:5px}.crop-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.crop-actions button,.small-btn{border:1px solid #3a4565;background:#252c49;color:#fff;border-radius:9px;padding:10px 7px;font-weight:700;cursor:pointer}.crop-actions button:hover,.small-btn:hover{border-color:var(--green)}.status{font-size:14px;min-height:24px;margin:10px 0;color:#c7f59b!important}.tool-note{font-size:12px;color:#9ea8c6!important}.subpanel{padding:15px;border:1px solid var(--line);border-radius:12px;margin:15px 0;background:rgba(9,13,28,.32)}.nielit-card{border:1px solid #3a4565;border-radius:12px;padding:14px;margin:12px 0;background:#11162b}.nielit-card h3{margin:0 0 5px}.hidden{display:none!important}
-footer{border-top:1px solid var(--line);padding:30px 20px;text-align:center;color:#9ca5c1;font-size:13px}footer strong{color:var(--green)}
-@media(max-width:600px){header{height:66px;padding:0 19px}.logo{font-size:19px}.nav{font-size:12px}.hero{padding:60px 20px 50px}h1{letter-spacing:-1.2px}.hero p{font-size:15px}.grid{grid-template-columns:1fr;gap:15px}main{padding:40px 16px 55px}.card{min-height:220px;padding:22px}.section-head{align-items:start}h2{font-size:26px}.control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.crop-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.workspace{padding:15px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
+:root{
+  --bg:#0d1020;
+  --panel:#171b32;
+  --text:#f7f8ff;
+  --muted:#b2b8d0;
+  --green:#a5e34b;
+  --line:rgba(255,255,255,.11);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Arial,sans-serif;line-height:1.6
+}
+a{color:inherit;text-decoration:none}
+header{
+  height:76px;padding:0 6%;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--line);
+  background:rgba(13,16,32,.94);position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(14px)
+}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.7px}
+.logo span{color:var(--green)}
+.nav{font-size:14px;color:#e4e7f4}
+.nav b{color:var(--green);margin-left:6px}
+.hero{
+  padding:78px 20px 60px;text-align:center;
+  background:
+  radial-gradient(ellipse at 15% 15%,rgba(99,72,235,.45),transparent 45%),
+  radial-gradient(ellipse at 85% 30%,rgba(17,171,194,.28),transparent 40%),
+  linear-gradient(135deg,#171632,#111c37 55%,#102a38);
+  border-bottom:1px solid var(--line)
+}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(165,227,75,.4);
+  background:rgba(165,227,75,.09);color:#c4f58a;
+  padding:7px 13px;border-radius:30px;font-size:12px;
+  font-weight:800;letter-spacing:1.3px
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+h1{
+  font-size:clamp(35px,7vw,64px);line-height:1.13;
+  letter-spacing:-2px;max-width:790px;margin:24px auto 18px
+}
+.gradient-text{
+  background:linear-gradient(90deg,#b9f36e,#69e5df,#a8a0ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p{max-width:590px;margin:0 auto;color:#c4c9df;font-size:17px}
+.search-wrap{max-width:530px;margin:30px auto 0;position:relative}
+.search-wrap input{
+  width:100%;padding:16px 19px 16px 48px;
+  border:1px solid rgba(255,255,255,.18);border-radius:14px;
+  background:rgba(8,13,29,.65);color:white;font-size:15px;outline:none
+}
+.search-wrap input:focus{border-color:var(--green)}
+.search-icon{position:absolute;left:17px;top:12px;font-size:22px;color:#bdc6e3}
+main{max-width:1120px;margin:auto;padding:55px 22px 75px}
+.section-head{
+  display:flex;justify-content:space-between;align-items:end;
+  gap:15px;margin-bottom:27px
+}
+h2{font-size:29px;letter-spacing:-.7px;line-height:1.25;margin:0}
+.section-head p{color:var(--muted);margin:8px 0 0;font-size:14px}
+.count{
+  color:#c9f79b;font-size:12px;font-weight:700;
+  background:rgba(165,227,75,.1);padding:7px 11px;
+  border-radius:25px;white-space:nowrap
+}
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px
+}
+.card{
+  position:relative;overflow:hidden;padding:25px;border-radius:20px;
+  background:linear-gradient(145deg,rgba(29,37,67,.97),rgba(20,26,47,.97));
+  border:1px solid var(--line);display:flex;flex-direction:column;
+  min-height:250px;transition:transform .2s,border-color .2s
+}
+.card:before{
+  content:"";position:absolute;width:150px;height:150px;
+  right:-85px;top:-85px;border-radius:50%;
+  background:var(--glow,rgba(111,94,246,.2));filter:blur(6px)
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(165,227,75,.5)}
+.icon-box{
+  position:relative;display:grid;place-items:center;
+  width:53px;height:53px;border-radius:15px;
+  background:var(--iconbg,rgba(126,106,255,.16));
+  border:1px solid rgba(255,255,255,.09);font-size:26px
+}
+.card h3{font-size:20px;line-height:1.3;margin:20px 0 8px}
+.card p{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 22px;flex:1}
+.btn{
+  display:inline-flex;justify-content:center;align-items:center;
+  gap:8px;background:var(--green);color:#15210c;border:0;
+  border-radius:11px;padding:12px 15px;font-size:14px;
+  font-weight:800;cursor:pointer;width:100%;text-align:center
+}
+.btn:hover{background:#b8f66a}
+.btn.alt{background:#242c49;color:#e8ebff;border:1px solid rgba(255,255,255,.12)}
+.btn.alt:hover{border-color:var(--green)}
+.notice{
+  margin-top:28px;padding:22px;border:1px solid var(--line);
+  background:linear-gradient(110deg,rgba(110,82,235,.12),rgba(20,181,194,.07));
+  border-radius:16px;color:var(--muted);font-size:14px
+}
+.notice strong{color:white}
+.hidden{display:none!important}
+footer{
+  border-top:1px solid var(--line);padding:30px 20px;
+  text-align:center;color:#9ca5c1;font-size:13px
+}
+footer strong{color:var(--green)}
+@media(max-width:600px){
+  header{height:66px;padding:0 19px}
+  .logo{font-size:19px}
+  .nav{font-size:12px}
+  .hero{padding:60px 20px 50px}
+  h1{letter-spacing:-1.2px}
+  .hero p{font-size:15px}
+  .grid{grid-template-columns:1fr;gap:15px}
+  main{padding:40px 16px 55px}
+  .card{min-height:220px;padding:22px}
+  .section-head{align-items:start}
+  h2{font-size:26px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .card{transition:none}
+}
 </style>
 </head>
+
 <body>
-<header><a class="logo" href="#">RYUHMO <span>TOOLS.</span></a><a class="nav" href="#tools">Explore tools <b>↘</b></a></header>
+<header>
+  <a class="logo" href="index.html">RYUHMO <span>TOOLS.</span></a>
+  <a class="nav" href="#tools">Explore tools <b>↘</b></a>
+</header>
+
 <section class="hero">
   <div class="pill"><span class="dot"></span> YOUR EVERYDAY DIGITAL TOOLKIT</div>
   <h1>Useful tools.<br><span class="gradient-text">Simpler work.</span></h1>
-  <p>Welcome! RYUHMO Digital Tools ah hian online tools te chu awlsam takin hmang rawh le.</p>
-  <div class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Search tools..." aria-label="Search tools"></div>
-</section>
-<main id="tools">
-  <div class="section-head"><div><h2>Explore our tools</h2><p>Practical utilities, ready when you need them.</p></div><span class="count">FREE TOOLS</span></div>
-  <div class="grid" id="grid">
-    <article class="card" data-name="image resizer photo resize dimensions pixels jpg jpeg png dpi crop"><div class="icon-box" style="--iconbg:rgba(79,151,255,.14);--glow:rgba(79,151,255,.25)">▧</div><h3>Image Resizer</h3><p>Crop, resize images to exact pixels, set DPI, and download JPG files.</p><button class="btn" onclick="openTool('image')">Open tool ↗</button></article>
-    <article class="card" data-name="jpg jpeg png pdf converter document images crop kb file size"><div class="icon-box" style="--iconbg:rgba(255,166,80,.13);--glow:rgba(255,166,80,.22)">▤</div><h3>JPG to PDF</h3><p>Crop images, choose a page size, set a target PDF size, and download.</p><button class="btn" onclick="openTool('pdf')">Open tool ↗</button></article>
-    <article class="card" data-name="nielit document resizer passport photo signature thumb impression"><div class="icon-box" style="--iconbg:rgba(69,215,173,.13);--glow:rgba(69,215,173,.2)">▣</div><h3>NIELIT Document Resizer</h3><p>Prepare passport photos, signatures and thumb impressions for applications.</p><button class="btn" onclick="openTool('nielit')">Open tool ↗</button></article>
-    <article class="card" data-name="video downloader youtube socialkit download media"><div class="icon-box" style="--iconbg:rgba(197,111,255,.13);--glow:rgba(197,111,255,.2)">▷</div><h3>Video Downloader</h3><p>A planned tool requiring secure server-side API integration.</p><button class="btn alt" onclick="comingSoon()">Coming soon</button></article>
+  <p>Welcome! He tools mitin tana hna ti awlsam thei tur free-a hman tura siam a ni.</p>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input id="search" type="search" placeholder="Search tools..." aria-label="Search tools">
   </div>
-  <div id="workspace" class="workspace hidden"></div>
-  <div class="notice"><strong>Built for everyday use.</strong><br>RYUHMO Digital Tools aims to make common document and image tasks simple, accessible and convenient on mobile or desktop.</div>
+</section>
+
+<main id="tools">
+  <div class="section-head">
+    <div>
+      <h2>Explore our tools</h2>
+      <p>Practical utilities, ready when you need them.</p>
+    </div>
+    <span class="count">FREE TOOLS</span>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="card" data-name="image resizer photo resize dimensions pixels jpg jpeg png dpi crop">
+      <div class="icon-box" style="--iconbg:rgba(79,151,255,.14);--glow:rgba(79,151,255,.25)">▧</div>
+      <h3>Image Resizer</h3>
+      <p>Crop freely, resize images, choose measurement units and set DPI.</p>
+      <a class="btn" href="IMAGE-RESIZER.html">Open tool ↗</a>
+    </article>
+
+    <article class="card" data-name="image to pdf jpg jpeg png pdf converter document images crop a4">
+      <div class="icon-box" style="--iconbg:rgba(255,166,80,.13);--glow:rgba(255,166,80,.22)">▤</div>
+      <h3>Image to PDF</h3>
+      <p>Combine images into a PDF, adjust image crops and choose page size.</p>
+      <a class="btn" href="Image-to-pdf.html">Open tool ↗</a>
+    </article>
+
+    <article class="card" data-name="pdf resizer compress reduce pdf size kb mb document">
+      <div class="icon-box" style="--iconbg:rgba(255,115,115,.13);--glow:rgba(255,115,115,.2)">▧</div>
+      <h3>PDF Resizer</h3>
+      <p>Resize or compress PDF documents using a dedicated tool.</p>
+      <a class="btn" href="Pdf-resizer.html">Open tool ↗</a>
+    </article>
+
+    <article class="card" data-name="nielit document resizer passport photo signature thumb impression">
+      <div class="icon-box" style="--iconbg:rgba(69,215,173,.13);--glow:rgba(69,215,173,.2)">▣</div>
+      <h3>NIELIT Document Resizer</h3>
+      <p>Prepare passport photos, signatures and thumb impressions for applications.</p>
+      <a class="btn" href="Nielit-resizer.html">Open tool ↗</a>
+    </article>
+
+    <article class="card" data-name="video downloader youtube socialkit download media">
+      <div class="icon-box" style="--iconbg:rgba(197,111,255,.13);--glow:rgba(197,111,255,.2)">▷</div>
+      <h3>Video Downloader</h3>
+      <p>Open the dedicated page for supported video download features.</p>
+      <a class="btn alt" href="Video-downloader.html">Open page ↗</a>
+    </article>
+
+  </div>
+
+  <div class="notice">
+    <strong>Built for everyday use.</strong><br>
+    RYUHMO Digital Tools aims to make common document and image tasks simple, accessible and convenient on mobile or desktop.
+  </div>
 </main>
-<footer>Made with care by <strong>RYUHMO</strong><br>© <span id="year"></span> RYUHMO Digital Tools</footer>
+
+<footer>
+  Made with care by <strong>RYUHMO</strong><br>
+  © <span id="year"></span> RYUHMO Digital Tools
+</footer>
+
 <script>
 'use strict';
-const $ = id => document.getElementById(id);
-$('year').textContent = new Date().getFullYear();
-$('search').addEventListener('input', () => {
-  const q = $('search').value.toLowerCase().trim();
-  document.querySelectorAll('.card').forEach(card => card.classList.toggle('hidden', !((card.dataset.name+' '+card.innerText).toLowerCase().includes(q))));
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+document.getElementById('search').addEventListener('input', function(){
+  const q = this.value.toLowerCase().trim();
+
+  document.querySelectorAll('.card').forEach(card => {
+    const text = (card.dataset.name + ' ' + card.innerText).toLowerCase();
+    card.classList.toggle('hidden', !text.includes(q));
+  });
 });
-function comingSoon(){alert('This tool is not available yet. It will be added after development and testing.');}
-function setStatus(id,text){const el=$(id);if(el)el.textContent=text;}
-function openTool(type){
-  const area=$('workspace'); area.classList.remove('hidden');
-  if(type==='image') renderImageTool();
-  else if(type==='pdf') renderPdfTool();
-  else if(type==='nielit') renderNielitTool();
-  area.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function renderImageTool(){
-  $('workspace').innerHTML=`
-  <h2>Image Resizer</h2><p>Choose a photo. Move the crop frame with your finger and drag its corner handles to adjust it.</p>
-  <label for="imgfile">Choose image</label><input id="imgfile" type="file" accept="image/*">
-  <div class="control-grid">
-    <div><label for="unit">Measurement unit</label><select id="unit"><option value="px">Pixels (px)</option><option value="in">Inches (in)</option><option value="cm">Centimeters (cm)</option><option value="mm">Millimeters (mm)</option></select></div>
-    <div><label for="iw">Width</label><input id="iw" type="number" min="0.01" max="100000" step="any" value="132"></div>
-    <div><label for="ih">Height</label><input id="ih" type="number" min="0.01" max="100000" step="any" value="170"></div>
-    <div><label for="idpi">DPI</label><input id="idpi" type="number" min="1" max="1200" value="150"></div>
-  </div>
-  <label style="display:flex;gap:9px;align-items:center"><input id="keepOriginal" type="checkbox" style="width:auto"> Keep cropped image at original pixel resolution (best for quality)</label>
-  <div class="crop-shell"><div class="crop-stage"><canvas id="cropPreview" aria-label="Crop preview"></canvas></div>
-  <div class="crop-actions"><button onclick="rotateCrop()">↻ Rotate</button><button onclick="resetCrop()">Reset crop</button><button onclick="applyCrop()">Apply crop</button></div></div>
-  <p class="tool-note">Tip: drag inside the frame to move it. Drag a white corner handle to resize it freely. The crop can have any aspect ratio.</p>
-  <button class="btn" onclick="resizeImage()">Crop, resize and download JPG</button><p id="imgmsg" class="status" role="status">Choose an image to begin.</p><canvas id="canvas" hidden></canvas>`;
-  $('imgfile').addEventListener('change',e=>loadCropImage(e.target.files[0]));
-  $('iw').addEventListener('change',resetCrop); $('ih').addEventListener('change',resetCrop); let previousUnit='px';$('unit').addEventListener('change',()=>{const u=$('unit').value,dpi=Math.max(1,Number($('idpi').value)||150),toPx=v=>previousUnit==='in'?v*dpi:previousUnit==='cm'?v*dpi/2.54:previousUnit==='mm'?v*dpi/25.4:v,fromPx=v=>u==='in'?v/dpi:u==='cm'?v*2.54/dpi:u==='mm'?v*25.4/dpi:v;$('iw').value=Number(fromPx(toPx(Number($('iw').value)||1)).toFixed(3));$('ih').value=Number(fromPx(toPx(Number($('ih').value)||1)).toFixed(3));previousUnit=u;document.querySelector('label[for=iw]').textContent='Width ('+u+')';document.querySelector('label[for=ih]').textContent='Height ('+u+')';});
-}
-let cropImage=null,cropRect=null,cropDrag=null,cropObjectURL=null,cropMode='move',cropApplied=false,cropRotation=0;
-function loadCropImage(file){
-  if(!file)return;
-  const img=new Image();
-  img.onload=()=>{
-    cropImage=img;cropRotation=0;
-    const c=$('cropPreview');c.width=img.naturalWidth;c.height=img.naturalHeight;
-    resetCrop();setStatus('imgmsg','Drag inside the frame to move it. Drag a corner handle to resize.');
-  };
-  img.onerror=()=>setStatus('imgmsg','Could not read this image. Try another file.');
-  if(cropObjectURL)URL.revokeObjectURL(cropObjectURL);
-  cropObjectURL=URL.createObjectURL(file);img.src=cropObjectURL;
-  const c=$('cropPreview');c.style.touchAction='none';
-  c.onpointerdown=e=>{
-    if(!cropImage||!cropRect)return;
-    e.preventDefault();const p=cropPoint(e,c),r=cropRect;
-    const hit=Math.max(16,c.width*.025);
-    if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y)<hit)cropMode='tl';
-    else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y)<hit)cropMode='tr';
-    else if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y-r.h)<hit)cropMode='bl';
-    else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y-r.h)<hit)cropMode='br';
-    else if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h)cropMode='move';
-    else cropMode='new';
-    cropDrag={x:p.x,y:p.y,old:{...r}};c.setPointerCapture(e.pointerId);
-  };
-  c.onpointermove=e=>{
-    if(!cropDrag)return;e.preventDefault();
-    const p=cropPoint(e,c),d=cropDrag,r=d.old,dx=p.x-d.x,dy=p.y-d.y;
-    if(cropMode==='move'){
-      cropRect={x:clamp(r.x+dx,0,c.width-r.w),y:clamp(r.y+dy,0,c.height-r.h),w:r.w,h:r.h};
-    }else{
-      let left=r.x,top=r.y,right=r.x+r.w,bottom=r.y+r.h;
-      if(cropMode==='new'){left=Math.min(d.x,p.x);top=Math.min(d.y,p.y);right=Math.max(d.x,p.x);bottom=Math.max(d.y,p.y);}
-      else{
-        if(cropMode==='tl'||cropMode==='bl')left+=dx;
-        if(cropMode==='tr'||cropMode==='br')right+=dx;
-        if(cropMode==='tl'||cropMode==='tr')top+=dy;
-        if(cropMode==='bl'||cropMode==='br')bottom+=dy;
-      }
-      left=clamp(left,0,c.width-1);top=clamp(top,0,c.height-1);
-      right=clamp(right,left+1,c.width);bottom=clamp(bottom,top+1,c.height);
-      cropRect={x:left,y:top,w:right-left,h:bottom-top};
-    }
-    cropApplied=false;drawCropPreview();
-  };
-  c.onpointerup=()=>{cropDrag=null;};c.onpointercancel=()=>{cropDrag=null;};
-}
-function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
-function cropPoint(e,c){const b=c.getBoundingClientRect();return{x:clamp((e.clientX-b.left)*c.width/b.width,0,c.width),y:clamp((e.clientY-b.top)*c.height/b.height,0,c.height)};}
-function drawCropPreview(){
-  const c=$('cropPreview');if(!c||!cropImage)return;const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(cropImage,0,0,c.width,c.height);if(!cropRect)return;
-  const r=cropRect;ctx.fillStyle='rgba(0,0,0,.52)';ctx.fillRect(0,0,c.width,c.height);ctx.clearRect(r.x,r.y,r.w,r.h);ctx.drawImage(cropImage,r.x,r.y,r.w,r.h,r.x,r.y,r.w,r.h);
-  ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(2,c.width/600);ctx.strokeRect(r.x,r.y,r.w,r.h);ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=1;
-  for(let i=1;i<=2;i++){ctx.beginPath();ctx.moveTo(r.x+r.w*i/3,r.y);ctx.lineTo(r.x+r.w*i/3,r.y+r.h);ctx.stroke();ctx.beginPath();ctx.moveTo(r.x,r.y+r.h*i/3);ctx.lineTo(r.x+r.w,r.y+r.h*i/3);ctx.stroke();}
-  const s=Math.max(14,Math.min(30,c.width*.025));ctx.fillStyle='#fff';ctx.strokeStyle='#54df91';ctx.lineWidth=2;
-  [[r.x,r.y],[r.x+r.w,r.y],[r.x,r.y+r.h],[r.x+r.w,r.y+r.h]].forEach(p=>{ctx.fillRect(p[0]-s/2,p[1]-s/2,s,s);ctx.strokeRect(p[0]-s/2,p[1]-s/2,s,s);});
-}
-function resetCrop(){
-  if(!cropImage)return;const c=$('cropPreview');if(!c)return;
-  cropRect={x:0,y:0,w:c.width,h:c.height};cropApplied=false;drawCropPreview();
-}
-function applyCrop(){if(!cropImage||!cropRect)return;cropApplied=true;setStatus('imgmsg','Crop selected. Tap the download button to export.');drawCropPreview();}
-function rotateCrop(){
-  if(!cropImage)return;const old=cropImage,t=document.createElement('canvas');t.width=old.naturalHeight;t.height=old.naturalWidth;const x=t.getContext('2d');x.translate(t.width/2,t.height/2);x.rotate(Math.PI/2);x.drawImage(old,-old.naturalWidth/2,-old.naturalHeight/2);
-  const im=new Image();im.onload=()=>{cropImage=im;const c=$('cropPreview');c.width=im.naturalWidth;c.height=im.naturalHeight;resetCrop();};im.src=t.toDataURL('image/png');
-}
-function makeJpegDpi(jpg,dpi){
-  return jpg.arrayBuffer().then(buf=>{
-    const b=new Uint8Array(buf);if(b.length<2||b[0]!==255||b[1]!==216)return jpg;
-    const hi=(dpi>>8)&255,lo=dpi&255;
-    const seg=new Uint8Array([255,224,0,16,74,70,73,70,0,1,2,1,hi,lo,hi,lo,0,0]);
-    return new Blob([b.slice(0,2),seg,b.slice(2)],{type:'image/jpeg'});
-  });
-}
-async function resizeImage(){
-  const f=$('imgfile')?.files[0],unit=$('unit').value,rawW=Number($('iw').value),rawH=Number($('ih').value),dpi=Number($('idpi').value);
-  const factor=unit==='in'?dpi:unit==='cm'?dpi/2.54:unit==='mm'?dpi/25.4:1;
-  const w=$('keepOriginal').checked?Math.max(1,Math.round(cropRect?.w||0)):Math.round(rawW*factor),h=$('keepOriginal').checked?Math.max(1,Math.round(cropRect?.h||0)):Math.round(rawH*factor);
-  if(!f||!cropImage||!cropRect||rawW<=0||rawH<=0||w<1||h<1||w>20000||h>20000||dpi<1||dpi>1200){setStatus('imgmsg','Choose an image and enter valid dimensions and DPI. Output dimensions must not exceed 20,000 px per side.');return;}
-  try{const c=$('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(cropImage,cropRect.x,cropRect.y,cropRect.w,cropRect.h,0,0,c.width,c.height);
-    const jpg=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',1.0));if(!jpg)throw Error('JPG export failed');const out=await makeJpegDpi(jpg,Math.round(dpi));downloadBlob(out,outputName(f.name,'jpg'));setStatus('imgmsg',`Downloaded as ${outputName(f.name,'jpg')} · ${w} × ${h} px JPG at maximum browser JPEG quality with ${dpi} DPI metadata. ${$('keepOriginal').checked?'Original crop pixel resolution preserved.':'Resizing to fewer pixels can reduce detail.'}`);
-  }catch(e){setStatus('imgmsg','Could not resize this image. Try another photo.');}
-}
-function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);}
-
-/* PDF creation uses binary-safe PDF objects and a best-effort target size. */
-function renderPdfTool(){
-  $('workspace').innerHTML=`
-  <h2>JPG to PDF</h2><p>Select images, crop each one, choose page size and optionally set a target PDF size.</p>
-  <label for="pdffiles">Choose images</label><input id="pdffiles" type="file" accept="image/*" multiple>
-  <div class="control-grid two"><div><label for="pagesize">Page size</label><select id="pagesize"><option value="a4">A4</option><option value="fit">Fit image</option></select></div><div><label for="targetkb">Target size (KB, optional)</label><input id="targetkb" type="number" min="1" placeholder="e.g. 200"></div></div>
-  <label for="pdfimage">Edit crop for image</label><select id="pdfimage" disabled><option>Select images first</option></select>
-  <div class="crop-shell"><div class="crop-stage"><canvas id="pdfPreview"></canvas></div><div class="crop-actions"><button onclick="rotatePdfImage()">↻ Rotate</button><button onclick="resetPdfCrop()">Reset crop</button><button onclick="applyPdfCrop()">Apply crop</button></div></div>
-  <p class="tool-note">Select each image in the dropdown to adjust its crop. For best clarity, the tool preserves original JPEG data when possible. A strict target size may conflict with maximum quality.</p>
-  <button class="btn" id="makePdfBtn" onclick="makePDF()">Create and download PDF</button><p id="pdfmsg" class="status" role="status"></p>`;
-  $('pdffiles').addEventListener('change',loadPdfImages);
-  $('pdfimage').addEventListener('change',()=>showPdfImage(Number($('pdfimage').value)));
-}
-let pdfItems=[],pdfCurrent=-1,pdfDrag=null,pdfMode='move';
-function loadPdfImages(){
-  pdfItems=[];pdfCurrent=-1;const files=[...$('pdffiles').files],sel=$('pdfimage');sel.innerHTML='';
-  if(!files.length){sel.disabled=true;return;}
-  sel.disabled=false;
-  files.forEach((f,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=`Image ${i+1}: ${f.name}`;sel.appendChild(opt);});
-  let remaining=files.length;
-  files.forEach((f,i)=>{const img=new Image();const url=URL.createObjectURL(f);img.onload=()=>{pdfItems[i]={file:f,img,url,rect:null,rotated:false};const c=$('pdfPreview');if(i===0){pdfCurrent=0;sel.value='0';showPdfImage(0);}if(--remaining===0)setStatus('pdfmsg',`${files.length} image(s) ready. Adjust each crop above.`);};img.onerror=()=>{if(--remaining===0)setStatus('pdfmsg','Some images could not be loaded.');};img.src=url;});
-}
-function showPdfImage(i){
-  const item=pdfItems[i];if(!item)return;pdfCurrent=i;const c=$('pdfPreview');c.width=item.img.naturalWidth;c.height=item.img.naturalHeight;
-  if(!item.rect){let w=c.width,h=c.height;item.rect={x:0,y:0,w,h};}
-  drawPdfPreview();c.style.touchAction='none';
-  c.onpointerdown=e=>{if(pdfCurrent<0)return;e.preventDefault();const p=pdfPoint(e,c),r=item.rect,hit=Math.max(16,c.width*.025);pdfMode=(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y)<hit)?'tl':(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y)<hit)?'tr':(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y-r.h)<hit)?'bl':(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y-r.h)<hit)?'br':(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h)?'move':'new';pdfDrag={x:p.x,y:p.y,old:{...r}};c.setPointerCapture(e.pointerId);};
-  c.onpointermove=e=>{if(!pdfDrag)return;e.preventDefault();const p=pdfPoint(e,c),d=pdfDrag,r=d.old,dx=p.x-d.x,dy=p.y-d.y;if(pdfMode==='move'){item.rect={x:clamp(r.x+dx,0,c.width-r.w),y:clamp(r.y+dy,0,c.height-r.h),w:r.w,h:r.h};}else{let l=pdfMode==='tl'||pdfMode==='bl'?Math.min(p.x,r.x+r.w):r.x,t=pdfMode==='tl'||pdfMode==='tr'?Math.min(p.y,r.y+r.h):r.y,rr=pdfMode==='tr'||pdfMode==='br'?Math.max(p.x,r.x):r.x+r.w,b=pdfMode==='bl'||pdfMode==='br'?Math.max(p.y,r.y):r.y+r.h;if(pdfMode==='new'){l=Math.min(d.x,p.x);t=Math.min(d.y,p.y);rr=Math.max(d.x,p.x);b=Math.max(d.y,p.y);}l=clamp(l,0,c.width-1);t=clamp(t,0,c.height-1);rr=clamp(rr,l+1,c.width);b=clamp(b,t+1,c.height);item.rect={x:l,y:t,w:rr-l,h:b-t};}drawPdfPreview();};
-  c.onpointerup=()=>pdfDrag=null;c.onpointercancel=()=>pdfDrag=null;
-}
-function pdfPoint(e,c){const b=c.getBoundingClientRect();return{x:clamp((e.clientX-b.left)*c.width/b.width,0,c.width),y:clamp((e.clientY-b.top)*c.height/b.height,0,c.height)};}
-function drawPdfPreview(){const item=pdfItems[pdfCurrent],c=$('pdfPreview');if(!item||!c)return;const x=c.getContext('2d'),r=item.rect;x.clearRect(0,0,c.width,c.height);x.drawImage(item.img,0,0);if(!r)return;x.fillStyle='rgba(0,0,0,.5)';x.fillRect(0,0,c.width,c.height);x.clearRect(r.x,r.y,r.w,r.h);x.drawImage(item.img,r.x,r.y,r.w,r.h,r.x,r.y,r.w,r.h);x.strokeStyle='#fff';x.lineWidth=Math.max(2,c.width/500);x.strokeRect(r.x,r.y,r.w,r.h);const s=Math.max(14,c.width*.025);x.fillStyle='#fff';[[r.x,r.y],[r.x+r.w,r.y],[r.x,r.y+r.h],[r.x+r.w,r.y+r.h]].forEach(p=>x.fillRect(p[0]-s/2,p[1]-s/2,s,s));}
-function resetPdfCrop(){const it=pdfItems[pdfCurrent];if(!it)return;it.rect={x:0,y:0,w:it.img.naturalWidth,h:it.img.naturalHeight};drawPdfPreview();}
-function applyPdfCrop(){drawPdfPreview();setStatus('pdfmsg','Crop selection applied for the selected image.');}
-function rotatePdfImage(){const it=pdfItems[pdfCurrent];if(!it)return;const old=it.img,t=document.createElement('canvas');t.width=old.naturalHeight;t.height=old.naturalWidth;const x=t.getContext('2d');x.translate(t.width/2,t.height/2);x.rotate(Math.PI/2);x.drawImage(old,-old.naturalWidth/2,-old.naturalHeight/2);const im=new Image();im.onload=()=>{it.img=im;it.rotated=true;it.rect={x:0,y:0,w:im.naturalWidth,h:im.naturalHeight};showPdfImage(pdfCurrent);};im.src=t.toDataURL('image/png');}
-async function makePDF(){
-  if(!pdfItems.length||pdfItems.some(x=>!x||!x.img)){setStatus('pdfmsg','Please select valid images first.');return;}
-  const btn=$('makePdfBtn');btn.disabled=true;setStatus('pdfmsg','Preparing a high-quality PDF…');
-  try{
-    const target=Number($('targetkb').value);
-    const pages=[];
-    for(const item of pdfItems){
-      const r=item.rect||{x:0,y:0,w:item.img.naturalWidth,h:item.img.naturalHeight};
-      const fullCrop=Math.abs(r.x)<0.5&&Math.abs(r.y)<0.5&&Math.abs(r.w-item.img.naturalWidth)<0.5&&Math.abs(r.h-item.img.naturalHeight)<0.5;
-      let bytes=null,w=Math.max(1,Math.round(r.w)),h=Math.max(1,Math.round(r.h));
-      // Preserve original JPEG bytes exactly when no crop or rotation was applied.
-      if(!item.rotated&&fullCrop&&item.file.type==='image/jpeg'){
-        bytes=new Uint8Array(await item.file.arrayBuffer());
-        const dims=await getJpegDimensions(item.file);
-        if(dims){w=dims.w;h=dims.h;}
-      }else{
-        const c=document.createElement('canvas');c.width=w;c.height=h;
-        const ctx=c.getContext('2d',{alpha:false});
-        ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-        ctx.drawImage(item.img,r.x,r.y,r.w,r.h,0,0,c.width,c.height);
-        const blob=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',1.0));
-        if(!blob)throw Error('Could not encode image');
-        bytes=new Uint8Array(await blob.arrayBuffer());
-      }
-      pages.push({w,h,bytes});
-    }
-    const finalBlob=buildPdf(pages,$('pagesize').value);
-    downloadBlob(finalBlob,outputName(pdfItems[0].file.name,'pdf'));
-    const kb=(finalBlob.size/1024).toFixed(1);
-    setStatus('pdfmsg',target>0&&finalBlob.size>target*1024?`PDF downloaded at ${kb} KB. The requested ${target} KB limit was not applied because reducing the file would lower image quality.`:`High-quality PDF downloaded (${kb} KB). Original JPEG data is preserved exactly when no crop or rotation is used.`);
-  }catch(e){setStatus('pdfmsg','PDF creation failed. Try fewer images or a supported JPG/PNG file.');}
-  finally{btn.disabled=false;}
-}
-async function getJpegDimensions(file){
-  try{const b=new Uint8Array(await file.slice(0,512*1024).arrayBuffer());let i=2;while(i<b.length-9){if(b[i]!==255){i++;continue;}const marker=b[i+1];i+=2;if(marker===216||marker===217||marker===1||(marker>=208&&marker<=215))continue;if(i+2>b.length)break;const len=(b[i]<<8)|b[i+1];if(len<2||i+len>b.length)break;if([192,193,194,195,197,198,199,201,202,203,205,206,207].includes(marker))return{h:(b[i+3]<<8)|b[i+4],w:(b[i+5]<<8)|b[i+6]};i+=len;}return null;}catch(e){return null;}
-}
-function buildPdf(pages,pageMode){
-  const enc=new TextEncoder();
-  const objects=[];
-  const kids=[];
-  const catalogId=1, pagesId=2;
-
-  function setObj(id, bytes){ objects[id]=bytes; }
-
-  pages.forEach((p,i)=>{
-    const imgId=3+i*3, contentId=imgId+1, pageId=imgId+2;
-    kids.push(`${pageId} 0 R`);
-
-    const a4w=595.28, a4h=841.89;
-    const scale=pageMode==='a4'?Math.min(a4w/p.w,a4h/p.h):1;
-    const pw=pageMode==='a4'?a4w:p.w;
-    const ph=pageMode==='a4'?a4h:p.h;
-    const iw=p.w*scale, ih=p.h*scale;
-    const x=(pw-iw)/2, y=(ph-ih)/2;
-    const content=enc.encode(`q\n${iw} 0 0 ${ih} ${x} ${y} cm\n/Im0 Do\nQ\n`);
-
-    const imgHead=enc.encode(
-      `<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.bytes.length} >>\nstream\n`
-    );
-    const imgTail=enc.encode('\nendstream');
-    setObj(imgId,joinBytes([imgHead,p.bytes,imgTail]));
-    setObj(contentId,joinBytes([
-      enc.encode(`<< /Length ${content.length} >>\nstream\n`),
-      content,
-      enc.encode('endstream')
-    ]));
-    setObj(pageId,enc.encode(
-      `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`
-    ));
-  });
-
-  const total=2+pages.length*3;
-  setObj(catalogId,enc.encode(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`));
-  setObj(pagesId,enc.encode(`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${pages.length} >>`));
-
-  const parts=[];
-  let byteLength=0;
-  const offsets=new Array(total+1).fill(0);
-  function push(bytes){parts.push(bytes);byteLength+=bytes.length;}
-  push(enc.encode('%PDF-1.4\n'));
-
-  for(let id=1;id<=total;id++){
-    offsets[id]=byteLength;
-    push(enc.encode(`${id} 0 obj\n`));
-    push(objects[id]);
-    push(enc.encode('\nendobj\n'));
-  }
-
-  const xrefOffset=byteLength;
-  let xref=`xref\n0 ${total+1}\n0000000000 65535 f \n`;
-  for(let id=1;id<=total;id++){
-    xref+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';
-  }
-  xref+=`trailer\n<< /Size ${total+1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
-  push(enc.encode(xref));
-  return new Blob(parts,{type:'application/pdf'});
-}
-function joinBytes(arrays){const size=arrays.reduce((s,a)=>s+a.length,0),out=new Uint8Array(size);let at=0;for(const a of arrays){out.set(a,at);at+=a.length;}return out;}
-
-/* NIELIT: exact pixel dimensions, DPI metadata and separate downloads. */
-function renderNielitTool(){
-  $('workspace').innerHTML=`<h2>NIELIT Document Resizer</h2><p>Prepare each file separately. Select a file, adjust its crop, then download each JPG individually.</p>
-  <div class="nielit-card"><h3>1. Passport Photo</h3><p class="tool-note">132 × 170 px · 150 DPI · target 5–50 KB</p><label for="nphoto">Choose passport photo</label><input id="nphoto" type="file" accept="image/*"><button class="btn" onclick="processNielit('photo')">Crop and download photo</button><p id="nphotomsg" class="status"></p></div>
-  <div class="nielit-card"><h3>2. Signature</h3><p class="tool-note">170 × 132 px · 150 DPI · target 5–20 KB</p><label for="nsign">Choose signature</label><input id="nsign" type="file" accept="image/*"><button class="btn" onclick="processNielit('sign')">Crop and download signature</button><p id="nsignmsg" class="status"></p></div>
-  <div class="nielit-card"><h3>3. Left Thumb Impression</h3><p class="tool-note">170 × 132 px · 150 DPI · target 5–20 KB</p><label for="nthumb">Choose left thumb impression</label><input id="nthumb" type="file" accept="image/*"><button class="btn" onclick="processNielit('thumb')">Crop and download thumb</button><p id="nthumbmsg" class="status"></p></div>
-  <p class="tool-note">Each edited file keeps its original filename (with .jpg as the output extension). File size is best-effort; the result is checked after export.</p>`;
-}
-async function processNielit(kind){
-  const cfg={photo:{input:'nphoto',msg:'nphotomsg',w:132,h:170,min:5,max:50,suffix:'_Photo.jpg'},sign:{input:'nsign',msg:'nsignmsg',w:170,h:132,min:5,max:20,suffix:'_Sign.jpg'},thumb:{input:'nthumb',msg:'nthumbmsg',w:170,h:132,min:5,max:20,suffix:'_Thumb.jpg'}}[kind];
-  const file=$(cfg.input).files[0];if(!file){setStatus(cfg.msg,'Please choose an image first.');return;}
-  setStatus(cfg.msg,'Processing image…');
-  try{
-    const img=await loadImageFile(file),c=document.createElement('canvas');c.width=cfg.w;c.height=cfg.h;
-    const ratio=cfg.w/cfg.h;let sw=img.naturalWidth,sh=sw/ratio;if(sh>img.naturalHeight){sh=img.naturalHeight;sw=sh*ratio;}
-    const sx=(img.naturalWidth-sw)/2,sy=(img.naturalHeight-sh)/2;c.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,c.width,c.height);
-    let chosen=null;
-    for(let q=.94;q>=.2;q-=.06){const b=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',q));chosen=await makeJpegDpi(b,150);const kb=chosen.size/1024;if(kb<=cfg.max)break;}
-    downloadBlob(chosen,outputName(file.name,'jpg',cfg.suffix.slice(0,-4)));
-    const kb=(chosen.size/1024).toFixed(1);
-    setStatus(cfg.msg,`Downloaded ${cfg.w} × ${cfg.h} px, 150 DPI, ${kb} KB. `+(chosen.size/1024<cfg.min?`Below ${cfg.min} KB minimum; this image is very simple/small.`:chosen.size/1024>cfg.max?`Above ${cfg.max} KB limit; try a simpler or smaller source image.`:'Within the requested file-size range.'));
-  }catch(e){setStatus(cfg.msg,'Could not process this file. Try another image.');}
-}
-function loadImageFile(file){return new Promise((resolve,reject)=>{const im=new Image(),u=URL.createObjectURL(file);im.onload=()=>{URL.revokeObjectURL(u);resolve(im);};im.onerror=()=>{URL.revokeObjectURL(u);reject(Error('Invalid image'));};im.src=u;});}
-function outputName(originalName,extension,suffix='_edit'){const lastDot=originalName.lastIndexOf('.');const rawStem=lastDot>0?originalName.slice(0,lastDot):originalName;const cleanStem=rawStem.trim().replace(/[\\/:*?"<>|]/g,'_');const firstName=(cleanStem.split(/\s+/)[0]||'image').slice(0,60);return firstName+suffix+'.'+extension;}
-function baseName(name){return name.replace(/\.[^.]+$/,'').replace(/[^\w-]+/g,'_');}
 </script>
 </body>
 </html>
