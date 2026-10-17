@@ -1,1 +1,141 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101329">
+<title>RYUHMO Video Downloader</title>
+<meta name="description" content="RYUHMO Video Downloader for public videos you own or have permission to save.">
+<style>
+:root{color-scheme:dark;--bg:#0d1020;--panel:#171b31;--line:#303958;--text:#f5f7ff;--muted:#aeb7d1;--blue:#5678ff;--cyan:#35d9ed;--green:#39dca0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#202650 0,#0d1020 58%);font-family:Arial,Helvetica,sans-serif;color:var(--text);min-height:100vh}
+header{padding:20px 16px;border-bottom:1px solid #ffffff12;background:#0d1020aa}
+.nav{max-width:960px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:19px;font-weight:800;letter-spacing:.5px}.brand span{color:var(--cyan)}
+.home{color:#dce4ff;text-decoration:none;border:1px solid var(--line);padding:9px 13px;border-radius:10px;font-size:13px}
+main{max-width:760px;margin:0 auto;padding:38px 16px 55px}
+.eyebrow{color:var(--cyan);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:2px;text-align:center}
+h1{text-align:center;font-size:clamp(29px,6vw,45px);margin:12px 0}
+.subtitle{text-align:center;color:var(--muted);line-height:1.6;margin:0 auto 28px;max-width:580px}
+.card{background:linear-gradient(145deg,#1a203a,#13172a);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 60px #0003}
+label{display:block;font-weight:700;margin:0 0 9px;font-size:14px}
+input,select{width:100%;background:#0e1224;border:1px solid #3a4568;border-radius:11px;padding:14px;color:white;font-size:15px;outline:none}
+input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #35d9ed20}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}
+button{border:0;cursor:pointer;border-radius:11px;font-weight:800;font-size:15px;padding:14px}
+.primary{width:100%;margin-top:18px;color:#071126;background:linear-gradient(100deg,var(--cyan),#7794ff)}
+.primary:disabled{opacity:.55;cursor:wait}
+.status{display:none;margin-top:17px;border-radius:12px;padding:14px;line-height:1.5;font-size:14px;overflow-wrap:anywhere}
+.status.show{display:block}.status.info{background:#263455;border:1px solid #5068a0}.status.error{background:#421f30;border:1px solid #a54c69}.status.success{background:#12382f;border:1px solid #26896d}
+.result{display:none;margin-top:15px;padding:14px;border:1px solid var(--line);border-radius:12px}
+.result.show{display:block}.download{display:inline-block;background:var(--green);color:#06251d;text-decoration:none;font-weight:800;padding:12px 16px;border-radius:10px;margin-top:10px}
+.note{color:var(--muted);font-size:12px;line-height:1.6;margin:17px 2px 0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.step{background:#ffffff06;border:1px solid #ffffff12;border-radius:13px;padding:15px}
+.step b{display:block;margin-bottom:7px;font-size:14px}.step span{font-size:12px;color:var(--muted);line-height:1.5}
+footer{text-align:center;color:#8994b2;font-size:12px;padding:20px}
+@media(max-width:520px){.row,.steps{grid-template-columns:1fr}.card{padding:17px}main{padding-top:28px}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<div class="brand">RYUHMO <span>TOOLS</span></div>
+<a class="home" href="index.html">← Home</a>
+</div></header>
+<main>
+<div class="eyebrow">Simple · Fast · Mobile friendly</div>
+<h1>Video Downloader</h1>
+<p class="subtitle">Paste a video link to check whether it can be processed by our downloader service.</p>
+<section class="card">
+<label for="videoUrl">Video URL</label>
+<input id="videoUrl" type="url" placeholder="https://example.com/video..." autocomplete="url">
+<div class="row">
+<div><label for="mode">Download type</label>
+<select id="mode"><option value="video">Video with audio</option><option value="audio">Audio only (if supported)</option></select></div>
+<div><label for="quality">Video quality</label>
+<select id="quality"><option value="720">720p</option><option value="1080">1080p</option><option value="480">480p</option><option value="best">Best available</option></select></div>
+</div>
+<button id="submit" class="primary">Check link &amp; prepare download</button>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<div id="result" class="result"></div>
+<p class="note">Use only for videos you own, have permission to save, or can lawfully download. Private, login-protected, DRM-protected or unsupported links may not work.</p>
+</section>
+<div class="steps">
+<div class="step"><b>01 · Paste</b><span>Enter a valid public video link.</span></div>
+<div class="step"><b>02 · Process</b><span>The connected backend checks the source.</span></div>
+<div class="step"><b>03 · Save</b><span>Download the prepared file if supported.</span></div>
+</div>
+</main>
+<footer>© <span id="year"></span> RYUHMO Digital Tools</footer>
+<script>
+/*
+  BACKEND REQUIRED:
+  After deploying your own compatible backend, replace this value with its
+  base URL, for example: https://your-service.example.com
+  Do not put private API keys in this public HTML file.
+*/
+const API_BASE = "YOUR_BACKEND_URL_HERE";
+const $ = id => document.getElementById(id);
+$("year").textContent = new Date().getFullYear();
+
+function showStatus(message, type="info"){
+  const box=$("status");
+  box.className="status show "+type;
+  box.textContent=message;
+}
+function validHttpUrl(value){
+  try{
+    const u=new URL(value);
+    return u.protocol==="https:" || u.protocol==="http:";
+  }catch{return false;}
+}
+$("submit").addEventListener("click", async()=>{
+  const url=$("videoUrl").value.trim();
+  $("result").className="result";
+  $("result").replaceChildren();
+  if(!url){showStatus("Please paste a video URL first.","error");return;}
+  if(!validHttpUrl(url)){showStatus("Enter a valid link beginning with https:// or http://.","error");return;}
+  if(API_BASE==="YOUR_BACKEND_URL_HERE"){
+    showStatus("The page is ready, but the download backend has not been connected yet. A separate server is required; GitHub Pages cannot process video downloads by itself.","error");
+    return;
+  }
+  const button=$("submit");
+  button.disabled=true;button.textContent="Checking link…";
+  showStatus("Contacting the download service. Please wait.");
+  try{
+    const response=await fetch(API_BASE.replace(/\/+$/,"")+"/api/download",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        url,
+        mode:$("mode").value,
+        quality:$("quality").value
+      })
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(data.error||"The service could not process this link.");
+    if(!data.downloadUrl) throw new Error("The service did not return a download link.");
+    const link=new URL(data.downloadUrl,API_BASE);
+    if(link.protocol!=="https:" && link.protocol!=="http:") throw new Error("The service returned an invalid download link.");
+    $("result").className="result show";
+    const title=document.createElement("div");
+    title.textContent=data.title||"Your file is ready";
+    const anchor=document.createElement("a");
+    anchor.className="download";anchor.href=link.href;
+    anchor.textContent="Download file";
+    anchor.rel="noopener";
+    anchor.setAttribute("download","");
+    $("result").append(title,anchor);
+    showStatus("The service prepared a download. If it fails, the source or service may not support this link.","success");
+  }catch(err){
+    showStatus(err.message||"Something went wrong. Please try again.","error");
+  }finally{
+    button.disabled=false;button.textContent="Check link & prepare download";
+  }
+});
+</script>
+</body>
+</html>
+
