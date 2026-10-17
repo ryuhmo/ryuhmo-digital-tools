@@ -160,7 +160,7 @@ async function resizeImage(){
   const w=$('keepOriginal').checked?Math.max(1,Math.round(cropRect?.w||0)):Math.round(rawW*factor),h=$('keepOriginal').checked?Math.max(1,Math.round(cropRect?.h||0)):Math.round(rawH*factor);
   if(!f||!cropImage||!cropRect||rawW<=0||rawH<=0||w<1||h<1||w>20000||h>20000||dpi<1||dpi>1200){setStatus('imgmsg','Choose an image and enter valid dimensions and DPI. Output dimensions must not exceed 20,000 px per side.');return;}
   try{const c=$('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(cropImage,cropRect.x,cropRect.y,cropRect.w,cropRect.h,0,0,c.width,c.height);
-    const jpg=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',1.0));if(!jpg)throw Error('JPG export failed');const out=await makeJpegDpi(jpg,Math.round(dpi));downloadBlob(out,'resized.jpg');setStatus('imgmsg',`Downloaded ${w} × ${h} px JPG at maximum browser JPEG quality with ${dpi} DPI metadata. ${$('keepOriginal').checked?'Original crop pixel resolution preserved.':'Resizing to fewer pixels can reduce detail.'}`);
+    const jpg=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',1.0));if(!jpg)throw Error('JPG export failed');const out=await makeJpegDpi(jpg,Math.round(dpi));downloadBlob(out,outputName(f.name,'jpg'));setStatus('imgmsg',`Downloaded as ${outputName(f.name,'jpg')} · ${w} × ${h} px JPG at maximum browser JPEG quality with ${dpi} DPI metadata. ${$('keepOriginal').checked?'Original crop pixel resolution preserved.':'Resizing to fewer pixels can reduce detail.'}`);
   }catch(e){setStatus('imgmsg','Could not resize this image. Try another photo.');}
 }
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);}
@@ -227,7 +227,7 @@ async function makePDF(){
       pages.push({w,h,bytes});
     }
     const finalBlob=buildPdf(pages,$('pagesize').value);
-    downloadBlob(finalBlob,'ryuhmo-images.pdf');
+    downloadBlob(finalBlob,outputName(pdfItems[0].file.name,'pdf'));
     const kb=(finalBlob.size/1024).toFixed(1);
     setStatus('pdfmsg',target>0&&finalBlob.size>target*1024?`PDF downloaded at ${kb} KB. The requested ${target} KB limit was not applied because reducing the file would lower image quality.`:`High-quality PDF downloaded (${kb} KB). Original JPEG data is preserved exactly when no crop or rotation is used.`);
   }catch(e){setStatus('pdfmsg','PDF creation failed. Try fewer images or a supported JPG/PNG file.');}
@@ -305,7 +305,7 @@ function renderNielitTool(){
   <div class="nielit-card"><h3>1. Passport Photo</h3><p class="tool-note">132 × 170 px · 150 DPI · target 5–50 KB</p><label for="nphoto">Choose passport photo</label><input id="nphoto" type="file" accept="image/*"><button class="btn" onclick="processNielit('photo')">Crop and download photo</button><p id="nphotomsg" class="status"></p></div>
   <div class="nielit-card"><h3>2. Signature</h3><p class="tool-note">170 × 132 px · 150 DPI · target 5–20 KB</p><label for="nsign">Choose signature</label><input id="nsign" type="file" accept="image/*"><button class="btn" onclick="processNielit('sign')">Crop and download signature</button><p id="nsignmsg" class="status"></p></div>
   <div class="nielit-card"><h3>3. Left Thumb Impression</h3><p class="tool-note">170 × 132 px · 150 DPI · target 5–20 KB</p><label for="nthumb">Choose left thumb impression</label><input id="nthumb" type="file" accept="image/*"><button class="btn" onclick="processNielit('thumb')">Crop and download thumb</button><p id="nthumbmsg" class="status"></p></div>
-  <p class="tool-note">Each file downloads separately with _Photo, _Sign or _Thumb in its filename. File size is best-effort; the result is checked after export.</p>`;
+  <p class="tool-note">Each edited file keeps its original filename (with .jpg as the output extension). File size is best-effort; the result is checked after export.</p>`;
 }
 async function processNielit(kind){
   const cfg={photo:{input:'nphoto',msg:'nphotomsg',w:132,h:170,min:5,max:50,suffix:'_Photo.jpg'},sign:{input:'nsign',msg:'nsignmsg',w:170,h:132,min:5,max:20,suffix:'_Sign.jpg'},thumb:{input:'nthumb',msg:'nthumbmsg',w:170,h:132,min:5,max:20,suffix:'_Thumb.jpg'}}[kind];
@@ -317,12 +317,13 @@ async function processNielit(kind){
     const sx=(img.naturalWidth-sw)/2,sy=(img.naturalHeight-sh)/2;c.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,c.width,c.height);
     let chosen=null;
     for(let q=.94;q>=.2;q-=.06){const b=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',q));chosen=await makeJpegDpi(b,150);const kb=chosen.size/1024;if(kb<=cfg.max)break;}
-    downloadBlob(chosen,baseName(file.name)+cfg.suffix);
+    downloadBlob(chosen,outputName(file.name,'jpg',cfg.suffix.slice(0,-4)));
     const kb=(chosen.size/1024).toFixed(1);
     setStatus(cfg.msg,`Downloaded ${cfg.w} × ${cfg.h} px, 150 DPI, ${kb} KB. `+(chosen.size/1024<cfg.min?`Below ${cfg.min} KB minimum; this image is very simple/small.`:chosen.size/1024>cfg.max?`Above ${cfg.max} KB limit; try a simpler or smaller source image.`:'Within the requested file-size range.'));
   }catch(e){setStatus(cfg.msg,'Could not process this file. Try another image.');}
 }
 function loadImageFile(file){return new Promise((resolve,reject)=>{const im=new Image(),u=URL.createObjectURL(file);im.onload=()=>{URL.revokeObjectURL(u);resolve(im);};im.onerror=()=>{URL.revokeObjectURL(u);reject(Error('Invalid image'));};im.src=u;});}
+function outputName(originalName,extension,suffix='_edit'){const lastDot=originalName.lastIndexOf('.');const rawStem=lastDot>0?originalName.slice(0,lastDot):originalName;const cleanStem=rawStem.trim().replace(/[\\/:*?"<>|]/g,'_');const firstName=(cleanStem.split(/\s+/)[0]||'image').slice(0,60);return firstName+suffix+'.'+extension;}
 function baseName(name){return name.replace(/\.[^.]+$/,'').replace(/[^\w-]+/g,'_');}
 </script>
 </body>
