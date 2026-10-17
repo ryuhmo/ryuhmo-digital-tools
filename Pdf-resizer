@@ -1,1 +1,134 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101329">
+<title>PDF Resizer | RYUHMO Tools</title>
+<style>
+:root{--bg:#0d1020;--panel:#171b32;--text:#f7f8ff;--muted:#b2b8d0;--green:#a5e34b;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+header{height:65px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#0d1020;border-bottom:1px solid var(--line)}
+.logo{font-size:20px;font-weight:900}.logo span,footer strong{color:var(--green)}
+.back{font-size:14px;color:#dbe1f8}
+.hero{text-align:center;padding:38px 18px 28px;background:radial-gradient(ellipse at 15% 15%,#40308088,transparent 50%),radial-gradient(ellipse at 85% 25%,#087f8a55,transparent 45%),linear-gradient(135deg,#171632,#111c37 60%,#102a38)}
+.pill{display:inline-block;border:1px solid #a5e34b66;background:#a5e34b14;color:#c4f58a;padding:5px 12px;border-radius:30px;font-size:11px;font-weight:bold;letter-spacing:1px}
+h1{font-size:clamp(30px,6vw,48px);line-height:1.2;margin:14px 0 8px}
+.gradient{background:linear-gradient(90deg,#b9f36e,#69e5df,#a8a0ff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:650px;margin:auto;color:#c4c9df;font-size:15px}
+main{max-width:800px;margin:auto;padding:25px 16px 55px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,3vw,24px);margin-bottom:18px}
+.panel h2{font-size:21px;margin:0 0 5px}
+.sub,.note{color:var(--muted);font-size:13px}
+.sub{margin:0 0 15px}
+label{display:block;margin:12px 0 5px;font-size:13px;color:#e5e9ff}
+input:not([type=checkbox]),select{width:100%;padding:11px;border-radius:9px;border:1px solid #3a4565;background:#10152a;color:white}
+.btn{display:block;width:100%;margin-top:13px;background:var(--green);color:#15210c;border:0;border-radius:9px;padding:13px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:wait}
+.secondary{background:#252c49;color:#fff;border:1px solid #3a4565}
+.status{font-size:13px;min-height:24px;margin:10px 0 0;color:#c7f59b}
+.info{padding:13px;border:1px solid #3a4565;border-radius:10px;background:#10152a;color:#c7cde4;font-size:13px;margin-top:14px}
+.progress{height:7px;background:#2a304b;border-radius:9px;overflow:hidden;margin-top:12px}
+.progress div{height:100%;width:0;background:var(--green);transition:width .2s}
+footer{text-align:center;padding:24px 15px;border-top:1px solid var(--line);color:#9ca5c1;font-size:12px}
+@media(max-width:600px){header{height:62px;padding:0 16px}.logo{font-size:18px}.hero{padding:34px 16px 25px}}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html">RYUHMO <span>TOOLS.</span></a>
+<a class="back" href="index.html">← All tools</a>
+</header>
+
+<section class="hero">
+<div class="pill">PDF DOCUMENT TOOL</div>
+<h1>PDF <span class="gradient">Resizer</span></h1>
+<p>Check PDF size and download a copy. Choose a target size to see whether the file can be reduced without changing its contents.</p>
+</section>
+
+<main>
+<section class="panel">
+<h2>1. Choose your PDF</h2>
+<p class="sub">Your document stays in your browser. This basic version does not upload it to a server.</p>
+<label for="pdfFile">Select PDF file</label>
+<input id="pdfFile" type="file" accept="application/pdf,.pdf">
+<div id="fileInfo" class="info">No PDF selected yet.</div>
+</section>
+
+<section class="panel">
+<h2>2. Set your target</h2>
+<label for="targetKB">Target size (KB)</label>
+<input id="targetKB" type="number" min="1" placeholder="e.g. 500">
+<p class="note">This basic version can copy the PDF unchanged, but cannot reliably compress every PDF. A smaller target may require image re-encoding or PDF object optimization.</p>
+<button id="checkBtn" class="btn" type="button">Check possible reduction</button>
+<button id="copyBtn" class="btn secondary" type="button" disabled>Download PDF copy</button>
+<div class="progress"><div id="bar"></div></div>
+<p id="status" class="status" aria-live="polite"></p>
+</section>
+
+<section class="panel">
+<h2>What this tool does</h2>
+<p class="note">This version reads the selected PDF's file size and offers an unchanged copy. It does not falsely claim to compress a document when no compression engine is present. Text and image quality remain unchanged in the downloaded copy.</p>
+</section>
+</main>
+
+<footer>Made with care by <strong>RYUHMO</strong><br>© <span id="year"></span> RYUHMO Digital Tools</footer>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+let selectedPdf=null;
+
+function kb(bytes){return (bytes/1024).toFixed(1);}
+function setStatus(msg){$('status').textContent=msg;}
+
+$('pdfFile').addEventListener('change',()=>{
+ selectedPdf=$('pdfFile').files[0]||null;
+ $('copyBtn').disabled=!selectedPdf;
+ $('bar').style.width='0%';
+ if(!selectedPdf){
+  $('fileInfo').textContent='No PDF selected yet.';
+  setStatus('');
+  return;
+ }
+ if(selectedPdf.type!=='application/pdf'&&!selectedPdf.name.toLowerCase().endsWith('.pdf')){
+  selectedPdf=null;$('copyBtn').disabled=true;
+  $('fileInfo').textContent='Please select a PDF file.';
+  return;
+ }
+ $('fileInfo').textContent=`File: ${selectedPdf.name} | Size: ${kb(selectedPdf.size)} KB`;
+ setStatus('PDF selected. You can check its target size or download an unchanged copy.');
+});
+
+$('checkBtn').addEventListener('click',()=>{
+ if(!selectedPdf){setStatus('Please choose a PDF first.');return;}
+ const target=Number($('targetKB').value);
+ const current=selectedPdf.size/1024;
+ $('bar').style.width='100%';
+ if(target>0&&target<current){
+  setStatus(`Current size: ${current.toFixed(1)} KB. Target: ${target} KB. This page cannot safely compress the PDF to that size yet; no compression is claimed.`);
+ }else if(target>=current&&target>0){
+  setStatus(`Current size is ${current.toFixed(1)} KB, already within the target of ${target} KB.`);
+ }else{
+  setStatus(`Current PDF size: ${current.toFixed(1)} KB. Enter a target size to compare.`);
+ }
+});
+
+$('copyBtn').addEventListener('click',()=>{
+ if(!selectedPdf)return;
+ const url=URL.createObjectURL(selectedPdf);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download=selectedPdf.name;
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),5000);
+ setStatus('An unchanged copy of your PDF has been downloaded. Original contents and quality are preserved.');
+});
+</script>
+</body>
+</html>
+
