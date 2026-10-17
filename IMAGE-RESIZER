@@ -1,1 +1,323 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101329">
+<title>Image Resizer | RYUHMO Tools</title>
+<style>
+:root{--bg:#0d1020;--panel:#171b32;--text:#f7f8ff;--muted:#b2b8d0;--green:#a5e34b;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+header{height:65px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#0d1020;border-bottom:1px solid var(--line)}
+.logo{font-size:20px;font-weight:900}.logo span,footer strong{color:var(--green)}
+.back{font-size:14px;color:#dbe1f8}
+.hero{text-align:center;padding:38px 18px 28px;background:radial-gradient(ellipse at 15% 15%,#40308088,transparent 50%),radial-gradient(ellipse at 85% 25%,#087f8a55,transparent 45%),linear-gradient(135deg,#171632,#111c37 60%,#102a38)}
+.pill{display:inline-block;border:1px solid #a5e34b66;background:#a5e34b14;color:#c4f58a;padding:5px 12px;border-radius:30px;font-size:11px;font-weight:bold;letter-spacing:1px}
+h1{font-size:clamp(30px,6vw,48px);line-height:1.2;margin:14px 0 8px}
+.gradient{background:linear-gradient(90deg,#b9f36e,#69e5df,#a8a0ff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:650px;margin:auto;color:#c4c9df;font-size:15px}
+main{max-width:900px;margin:auto;padding:25px 16px 55px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,3vw,24px);margin-bottom:18px}
+.panel h2{font-size:21px;margin:0 0 5px}
+.sub,.note{color:var(--muted);font-size:13px}
+.sub{margin:0 0 15px}
+label{display:block;margin:10px 0 5px;font-size:13px;color:#e5e9ff}
+input:not([type=checkbox]),select{width:100%;padding:11px;border-radius:9px;border:1px solid #3a4565;background:#10152a;color:white}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.checkrow{display:flex;align-items:flex-start;gap:9px;margin-top:13px;color:#e5e9ff;font-size:13px}
+.checkrow input{margin-top:5px;flex-shrink:0}
+.crop-shell{margin:15px 0 10px;padding:10px;border:1px solid #3a4565;border-radius:13px;background:#0d1225}
+.stage{display:flex;justify-content:center;align-items:center;min-height:120px;overflow:hidden}
+.stage canvas{display:block;max-width:100%;max-height:58vh;height:auto;object-fit:contain;touch-action:none}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.smallbtn,.btn{border:1px solid #3a4565;background:#252c49;color:#fff;border-radius:9px;padding:11px 8px;font-weight:700;cursor:pointer;text-align:center}
+.btn{display:block;width:100%;margin-top:13px;background:var(--green);color:#15210c;border:0;padding:13px}
+.btn:disabled{opacity:.6}
+.status{font-size:13px;min-height:24px;margin:10px 0 0;color:#c7f59b}
+footer{text-align:center;padding:24px 15px;border-top:1px solid var(--line);color:#9ca5c1;font-size:12px}
+@media(max-width:600px){header{height:62px;padding:0 16px}.logo{font-size:18px}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:34px 16px 25px}.actions{gap:6px}.smallbtn{font-size:12px;padding:10px 4px}}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html">RYUHMO <span>TOOLS.</span></a>
+<a class="back" href="index.html">← All tools</a>
+</header>
+
+<section class="hero">
+<div class="pill">FREE IMAGE TOOL</div>
+<h1>Image <span class="gradient">Resizer</span></h1>
+<p>Crop freely, resize accurately, choose your measurement unit and set DPI. Your image is processed in your browser.</p>
+</section>
+
+<main>
+<section class="panel">
+<h2>1. Choose your image</h2>
+<p class="sub">Use the original photo for the best possible output quality.</p>
+<label for="imageFile">Select image</label>
+<input id="imageFile" type="file" accept="image/*">
+<p class="note">Your image is processed on your device, not uploaded to a server.</p>
+</section>
+
+<section class="panel">
+<h2>2. Free crop</h2>
+<p class="sub">Drag inside the crop box to move it. Drag its corner handles to change width and height freely.</p>
+<div class="crop-shell">
+<div class="stage"><canvas id="preview" aria-label="Image crop editor"></canvas></div>
+<div class="actions">
+<button class="smallbtn" id="rotateBtn" type="button">↻ Rotate 90°</button>
+<button class="smallbtn" id="resetBtn" type="button">Reset crop</button>
+<button class="smallbtn" id="fullBtn" type="button">Full image</button>
+</div>
+</div>
+<p id="cropStatus" class="status">Choose an image to start cropping.</p>
+</section>
+
+<section class="panel">
+<h2>3. Output dimensions</h2>
+<p class="sub">Pixel dimensions determine actual sharpness. DPI sets print-resolution metadata.</p>
+<div class="grid3">
+<div><label for="unit">Measurement unit</label>
+<select id="unit">
+<option value="px">Pixels (px)</option>
+<option value="in">Inches (in)</option>
+<option value="cm">Centimeters (cm)</option>
+<option value="mm">Millimeters (mm)</option>
+</select></div>
+<div><label for="dpi">DPI</label><input id="dpi" type="number" min="1" max="1200" value="150"></div>
+<div><label for="quality">JPEG quality</label>
+<select id="quality">
+<option value="1">Maximum</option>
+<option value="0.98">Very high</option>
+<option value="0.94">High</option>
+<option value="0.88">Smaller file</option>
+</select></div>
+</div>
+<div class="grid">
+<div><label for="width">Width (px)</label><input id="width" type="number" min="1" step="any" value="132"></div>
+<div><label for="height">Height (px)</label><input id="height" type="number" min="1" step="any" value="170"></div>
+</div>
+<label class="checkrow">
+<input id="keepCropResolution" type="checkbox" checked>
+<span><strong>Keep original crop resolution</strong><br><span class="note">Exports the selected crop at its original pixel dimensions instead of reducing it to the dimensions above.</span></span>
+</label>
+<label class="checkrow">
+<input id="lockRatio" type="checkbox">
+<span>Keep output width/height ratio when changing dimensions</span>
+</label>
+<button class="btn" id="downloadBtn" type="button">Crop and download JPG</button>
+<p id="outputStatus" class="status" aria-live="polite"></p>
+<p class="note">JPEG is a lossy format. Maximum quality reduces extra compression loss but cannot restore detail missing from a blurry or low-resolution source. Resizing to fewer pixels can reduce sharpness.</p>
+</section>
+</main>
+
+<footer>Made with care by <strong>RYUHMO</strong><br>© <span id="year"></span> RYUHMO Digital Tools</footer>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+
+let sourceImage=null,sourceFile=null,sourceUrl=null,crop=null,drag=null,dragMode='move',unit='px',ratioLock=0;
+const canvas=$('preview'),ctx=canvas.getContext('2d');
+
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function setStatus(id,msg){$(id).textContent=msg;}
+
+function cropPoint(e){
+ const b=canvas.getBoundingClientRect();
+ return {x:clamp((e.clientX-b.left)*canvas.width/b.width,0,canvas.width),
+ y:clamp((e.clientY-b.top)*canvas.height/b.height,0,canvas.height)};
+}
+
+function loadImage(file){
+ if(!file)return;
+ if(!file.type.startsWith('image/')){setStatus('cropStatus','Please choose a valid image.');return;}
+ const u=URL.createObjectURL(file),im=new Image();
+ im.onload=()=>{
+  if(sourceUrl)URL.revokeObjectURL(sourceUrl);
+  sourceUrl=u;sourceImage=im;sourceFile=file;
+  canvas.width=im.naturalWidth;canvas.height=im.naturalHeight;
+  crop={x:0,y:0,w:canvas.width,h:canvas.height};
+  draw();
+  $('keepCropResolution').checked=true;
+  $('width').value=canvas.width;$('height').value=canvas.height;
+  setStatus('cropStatus',`Loaded ${canvas.width} × ${canvas.height} px. Drag to crop.`);
+ };
+ im.onerror=()=>{URL.revokeObjectURL(u);setStatus('cropStatus','Could not read this image. Try another file.');};
+ im.src=u;
+}
+$('imageFile').addEventListener('change',e=>loadImage(e.target.files[0]));
+
+function draw(){
+ if(!sourceImage)return;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);
+ if(!crop)return;
+ const r=crop;
+ ctx.fillStyle='rgba(0,0,0,.52)';
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.clearRect(r.x,r.y,r.w,r.h);
+ ctx.drawImage(sourceImage,r.x,r.y,r.w,r.h,r.x,r.y,r.w,r.h);
+ ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(2,canvas.width/700);
+ ctx.strokeRect(r.x,r.y,r.w,r.h);
+ const s=Math.max(12,Math.min(30,canvas.width*.025));
+ ctx.fillStyle='#fff';ctx.strokeStyle='#45df91';ctx.lineWidth=2;
+ [[r.x,r.y],[r.x+r.w,r.y],[r.x,r.y+r.h],[r.x+r.w,r.y+r.h]].forEach(p=>{
+  ctx.fillRect(p[0]-s/2,p[1]-s/2,s,s);
+  ctx.strokeRect(p[0]-s/2,p[1]-s/2,s,s);
+ });
+}
+
+canvas.addEventListener('pointerdown',e=>{
+ if(!sourceImage)return;
+ e.preventDefault();
+ const p=cropPoint(e),r=crop,hit=Math.max(16,canvas.width*.02);
+ if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y)<hit)dragMode='tl';
+ else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y)<hit)dragMode='tr';
+ else if(Math.abs(p.x-r.x)<hit&&Math.abs(p.y-r.y-r.h)<hit)dragMode='bl';
+ else if(Math.abs(p.x-r.x-r.w)<hit&&Math.abs(p.y-r.y-r.h)<hit)dragMode='br';
+ else if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h)dragMode='move';
+ else dragMode='new';
+ drag={x:p.x,y:p.y,old:{...r}};
+ canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener('pointermove',e=>{
+ if(!drag)return;
+ e.preventDefault();
+ const p=cropPoint(e),d=drag,r=d.old,dx=p.x-d.x,dy=p.y-d.y;
+ if(dragMode==='move'){
+  crop={x:clamp(r.x+dx,0,canvas.width-r.w),y:clamp(r.y+dy,0,canvas.height-r.h),w:r.w,h:r.h};
+ }else{
+  let l=r.x,t=r.y,rr=r.x+r.w,b=r.y+r.h;
+  if(dragMode==='new'){l=Math.min(d.x,p.x);t=Math.min(d.y,p.y);rr=Math.max(d.x,p.x);b=Math.max(d.y,p.y);}
+  else{
+   if(dragMode==='tl'||dragMode==='bl')l+=dx;
+   if(dragMode==='tr'||dragMode==='br')rr+=dx;
+   if(dragMode==='tl'||dragMode==='tr')t+=dy;
+   if(dragMode==='bl'||dragMode==='br')b+=dy;
+  }
+  l=clamp(l,0,canvas.width-1);t=clamp(t,0,canvas.height-1);
+  rr=clamp(rr,l+1,canvas.width);b=clamp(b,t+1,canvas.height);
+  crop={x:l,y:t,w:rr-l,h:b-t};
+ }
+ draw();
+});
+canvas.addEventListener('pointerup',()=>drag=null);
+canvas.addEventListener('pointercancel',()=>drag=null);
+
+$('resetBtn').addEventListener('click',()=>{
+ if(!sourceImage)return;
+ crop={x:0,y:0,w:canvas.width,h:canvas.height};draw();
+ setStatus('cropStatus','Crop reset to the full image.');
+});
+$('fullBtn').addEventListener('click',()=>{
+ if(!sourceImage)return;
+ crop={x:0,y:0,w:canvas.width,h:canvas.height};draw();
+ setStatus('cropStatus','Full image selected.');
+});
+
+$('rotateBtn').addEventListener('click',()=>{
+ if(!sourceImage)return;
+ const old=sourceImage,t=document.createElement('canvas');
+ t.width=canvas.height;t.height=canvas.width;
+ const x=t.getContext('2d');
+ x.translate(t.width/2,t.height/2);x.rotate(Math.PI/2);
+ x.drawImage(old,-canvas.width/2,-canvas.height/2);
+ t.toBlob(blob=>{
+  if(!blob)return;
+  const u=URL.createObjectURL(blob),im=new Image();
+  im.onload=()=>{
+   if(sourceUrl)URL.revokeObjectURL(sourceUrl);
+   sourceUrl=u;sourceImage=im;
+   canvas.width=im.naturalWidth;canvas.height=im.naturalHeight;
+   crop={x:0,y:0,w:canvas.width,h:canvas.height};draw();
+   setStatus('cropStatus','Image rotated. Crop frame reset.');
+  };
+  im.src=u;
+ },'image/png');
+});
+
+function pxFromUnit(v,u,dpi){
+ return u==='in'?v*dpi:u==='cm'?v*dpi/2.54:u==='mm'?v*dpi/25.4:v;
+}
+function unitFromPx(v,u,dpi){
+ return u==='in'?v/dpi:u==='cm'?v*2.54/dpi:u==='mm'?v*25.4/dpi:v;
+}
+
+$('unit').addEventListener('change',()=>{
+ const next=$('unit').value,dpi=Math.max(1,Number($('dpi').value)||150);
+ $('width').value=Number(unitFromPx(pxFromUnit(Number($('width').value)||1,unit,dpi),next,dpi).toFixed(3));
+ $('height').value=Number(unitFromPx(pxFromUnit(Number($('height').value)||1,unit,dpi),next,dpi).toFixed(3));
+ unit=next;
+ document.querySelector('label[for="width"]').textContent='Width ('+unit+')';
+ document.querySelector('label[for="height"]').textContent='Height ('+unit+')';
+});
+
+$('width').addEventListener('input',()=>{
+ if($('lockRatio').checked&&ratioLock>0)$('height').value=(Number($('width').value)/ratioLock).toFixed(3);
+});
+$('height').addEventListener('input',()=>{
+ if($('lockRatio').checked&&ratioLock>0)$('width').value=(Number($('height').value)*ratioLock).toFixed(3);
+});
+$('lockRatio').addEventListener('change',()=>{
+ ratioLock=Number($('width').value)/Math.max(1,Number($('height').value));
+});
+
+function safeBase(name){
+ let base=name.replace(/\.[^.]+$/,'').trim().replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_');
+ base=base.replace(/_+/g,'_').replace(/^\.+|\.+$/g,'');
+ return (base||'image').slice(0,100);
+}
+function download(blob,name){
+ const u=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(u),5000);
+}
+function withDpi(jpg,dpi){
+ return jpg.arrayBuffer().then(buf=>{
+  const b=new Uint8Array(buf);
+  if(b.length<2||b[0]!==255||b[1]!==216)return jpg;
+  const d=Math.round(dpi),hi=(d>>8)&255,lo=d&255;
+  const seg=new Uint8Array([255,224,0,16,74,70,73,70,0,1,2,1,hi,lo,hi,lo,0,0]);
+  return new Blob([b.slice(0,2),seg,b.slice(2)],{type:'image/jpeg'});
+ });
+}
+
+$('downloadBtn').addEventListener('click',async()=>{
+ if(!sourceImage||!sourceFile||!crop){setStatus('outputStatus','Please choose an image first.');return;}
+ const dpi=Number($('dpi').value),u=$('unit').value,rawW=Number($('width').value),rawH=Number($('height').value);
+ if(!Number.isFinite(dpi)||dpi<1||dpi>1200||rawW<=0||rawH<=0){
+  setStatus('outputStatus','Enter valid width, height and DPI (1–1200).');return;
+ }
+ const w=$('keepCropResolution').checked?Math.round(crop.w):Math.round(pxFromUnit(rawW,u,dpi));
+ const h=$('keepCropResolution').checked?Math.round(crop.h):Math.round(pxFromUnit(rawH,u,dpi));
+ if(w<1||h<1||w>20000||h>20000){
+  setStatus('outputStatus','Output dimensions must be between 1 and 20,000 pixels per side.');return;
+ }
+ const btn=$('downloadBtn');btn.disabled=true;
+ setStatus('outputStatus','Preparing high-quality JPG…');
+ try{
+  const out=document.createElement('canvas');out.width=w;out.height=h;
+  const ox=out.getContext('2d',{alpha:false});
+  ox.imageSmoothingEnabled=true;ox.imageSmoothingQuality='high';
+  ox.drawImage(sourceImage,crop.x,crop.y,crop.w,crop.h,0,0,w,h);
+  const blob=await new Promise(resolve=>out.toBlob(resolve,'image/jpeg',Number($('quality').value)));
+  if(!blob)throw Error('Export failed');
+  const final=await withDpi(blob,dpi);
+  const filename=safeBase(sourceFile.name)+'_edit.jpg';
+  download(final,filename);
+  setStatus('outputStatus',`Downloaded ${filename} — ${w} × ${h} px, ${dpi} DPI metadata, ${(final.size/1024).toFixed(1)} KB.`);
+ }catch(e){
+  setStatus('outputStatus','Could not export this image. Try a smaller image or another format.');
+ }finally{btn.disabled=false;}
+});
+</script>
+</body>
+</html>
+
