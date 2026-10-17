@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="Free online tools by RYUHMO. Resize images, convert JPG to PDF and prepare documents easily.">
+<title>RYUHMO Digital Tools</title>
+<style>
+:root{--bg:#0b1120;--panel:#151f32;--text:#f4f7ff;--muted:#aab6cc;--accent:#9bd447;--line:#29364c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
+header{padding:17px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0b1120;z-index:5}
+.logo{font-weight:800;font-size:21px;color:var(--accent);letter-spacing:.5px}
+header a{color:var(--text);text-decoration:none}
+.hero{text-align:center;padding:65px 20px 48px;background:radial-gradient(ellipse at top,#213553 0%,#0b1120 70%)}
+.hero h1{font-size:clamp(32px,7vw,54px);line-height:1.15;margin:10px auto 18px;max-width:760px}
+.hero p{color:var(--muted);max-width:600px;margin:0 auto 25px}
+.tag{color:var(--accent);font-size:13px;font-weight:bold;letter-spacing:2px}
+.search{display:block;width:min(100%,480px);margin:auto;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#111a2a;color:white;font-size:16px}
+main{max-width:1100px;margin:auto;padding:30px 20px 65px}
+.section-title{font-size:25px;margin-bottom:5px}
+.intro{color:var(--muted);margin-top:0;margin-bottom:25px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:17px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;min-height:220px}
+.symbol{font-size:30px}
+.card h3{margin:9px 0 5px}
+.card p{color:var(--muted);font-size:14px;margin:0 0 18px;flex:1}
+.btn{display:inline-block;text-align:center;background:var(--accent);color:#14200c;border:0;border-radius:9px;padding:11px 14px;font-weight:bold;text-decoration:none;cursor:pointer}
+.btn.secondary{background:#25334a;color:white;border:1px solid #40516d}
+.notice{background:#151f32;border:1px solid var(--line);padding:17px;border-radius:12px;color:var(--muted);margin-top:28px}
+footer{text-align:center;border-top:1px solid var(--line);padding:25px 15px;color:var(--muted);font-size:13px}
+footer strong{color:var(--accent)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="#">RYUHMO<span style="color:white"> TOOLS</span></a>
+<a href="#tools">Explore Tools ↓</a>
+</header>
+<section class="hero">
+<div class="tag">SIMPLE · USEFUL · ACCESSIBLE</div>
+<h1>Your everyday digital tools, in one place.</h1>
+<p>Welcome! I lawm a nih. RYUHMO Digital Tools ah hian online tools te chu awlsam takin hmang rawh le.</p>
+<input id="search" class="search" type="search" placeholder="Search tools..." aria-label="Search tools">
+</section>
+<main id="tools">
+<h2 class="section-title">Explore Our Tools</h2>
+<p class="intro">Useful utilities for documents, images and everyday work.</p>
+<div class="grid" id="grid">
+<article class="card" data-name="image resizer photo resize dpi">
+<div class="symbol">🖼️</div><h3>Image Resizer</h3>
+<p>Resize an image to your required pixel dimensions and download the result.</p>
+<button class="btn" onclick="openTool('image')">Open Tool</button>
+</article>
+<article class="card" data-name="jpg jpeg png pdf converter document">
+<div class="symbol">📄</div><h3>JPG to PDF</h3>
+<p>Combine images into a PDF document using your browser.</p>
+<button class="btn" onclick="openTool('pdf')">Open Tool</button>
+</article>
+<article class="card" data-name="nielit passport photo signature thumb document resizer">
+<div class="symbol">🪪</div><h3>NIELIT Document Resizer</h3>
+<p>Prepare passport photos, signatures and thumb impressions to application requirements.</p>
+<button class="btn secondary" onclick="alert('The NIELIT-specific resizing workflow is coming next.')">Coming Soon</button>
+</article>
+<article class="card" data-name="video downloader youtube socialkit">
+<div class="symbol">🎬</div><h3>Video Downloader</h3>
+<p>A future addition requiring a secure video-processing service.</p>
+<button class="btn secondary" onclick="alert('Video downloader setup is pending secure API configuration.')">Coming Soon</button>
+</article>
+</div>
+<div id="workspace" class="notice hidden"></div>
+</main>
+<footer>Made with care by <strong>RYUHMO</strong><br>© <span id="year"></span> RYUHMO Digital Tools</footer>
+<script>
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+document.querySelectorAll('.card').forEach(card=>{
+card.classList.toggle('hidden',!card.dataset.name.toLowerCase().includes(search.value.toLowerCase())&&!card.innerText.toLowerCase().includes(search.value.toLowerCase()));
+});
+});
+document.getElementById('year').textContent=new Date().getFullYear();
+function openTool(type){
+const area=document.getElementById('workspace');
+area.classList.remove('hidden');
+if(type==='image'){
+area.innerHTML=`<h2>Image Resizer</h2><p>Select an image. Resizing happens in your browser.</p><input id="imgfile" type="file" accept="image/*"><p>Width (px) <input id="iw" type="number" min="1" value="132"> Height (px) <input id="ih" type="number" min="1" value="170"></p><button class="btn" onclick="resizeImage()">Resize & Download</button><p id="imgmsg"></p><canvas id="canvas" style="max-width:100%;display:block;margin-top:15px"></canvas>`;
+}else{
+area.innerHTML=`<h2>JPG to PDF</h2><p>Select one or more images. They will be combined into a PDF in your browser.</p><input id="pdffiles" type="file" accept="image/jpeg,image/png,image/webp" multiple><p>Page size <select id="pagesize"><option value="a4">A4</option><option value="fit">Fit image</option></select></p><button class="btn" onclick="makePDF()">Create PDF</button><p id="pdfmsg"></p>`;
+}
+area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function resizeImage(){
+const f=document.getElementById('imgfile').files[0],w=Number(document.getElementById('iw').value),h=Number(document.getElementById('ih').value),msg=document.getElementById('imgmsg');
+if(!f||w<1||h<1){msg.textContent='Choose an image and enter valid dimensions.';return}
+const im=new Image(),url=URL.createObjectURL(f);
+im.onload=()=>{
+const c=document.getElementById('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+c.toBlob(blob=>{if(!blob){msg.textContent='Could not create image.';return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resized.jpg';a.click();msg.textContent='Resized image downloaded as JPG.';URL.revokeObjectURL(url)},'image/jpeg',.92);
+};im.onerror=()=>msg.textContent='Could not read this image.';im.src=url;
+}
+async function makePDF(){
+const files=[...document.getElementById('pdffiles').files],msg=document.getElementById('pdfmsg');
+if(!files.length){msg.textContent='Please select at least one image.';return}
+msg.textContent='Preparing PDF…';
+try{
+const pages=[],size=document.getElementById('pagesize').value;
+for(const f of files){
+const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});
+const im=await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=data});
+const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);
+const jpg=c.toDataURL('image/jpeg',.9),bin=atob(jpg.split(',')[1]);let hex='';for(let j=0;j<bin.length;j++)hex+=bin.charCodeAt(j).toString(16).padStart(2,'0');
+pages.push({w:c.width,h:c.height,hex});
+}
+let objects=[],add=s=>{objects.push(s);return objects.length},catalog=add(''),pagesObj=add(''),kids=[];
+for(const p of pages){
+const maxW=size==='a4'?595:Math.min(p.w,595),maxH=size==='a4'?842:Math.min(p.h,842),scale=Math.min(maxW/p.w,maxH/p.h),pw=size==='a4'?595:p.w*scale,ph=size==='a4'?842:p.h*scale,x=(pw-p.w*scale)/2,y=(ph-p.h*scale)/2,content=`q\n${p.w*scale} 0 0 ${p.h*scale} ${x} ${y} cm\n/Im0 Do\nQ`;
+const img=add(`<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.hex.length/2} >>\nstream\n${p.hex.match(/.{1,120}/g).join('\n')}\nendstream`);
+const stream=add(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+const page=add(`<< /Type /Page /Parent ${pagesObj} 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${img} 0 R >> >> /Contents ${stream} 0 R >>`);kids.push(`${page} 0 R`);
+}
+objects[catalog-1]='<< /Type /Catalog /Pages '+pagesObj+' 0 R >>';objects[pagesObj-1]=`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${kids.length} >>`;
+let pdf='%PDF-1.4\n',offsets=[0];objects.forEach((o,i)=>{offsets.push(new TextEncoder().encode(pdf).length);pdf+=`${i+1} 0 obj\n${o}\nendobj\n`});
+const xref=new TextEncoder().encode(pdf).length;pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;for(let i=1;i<offsets.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';pdf+=`trailer\n<< /Size ${objects.length+1} /Root ${catalog} 0 R >>\nstartxref\n${xref}\n%%EOF`;
+const blob=new Blob([pdf],{type:'application/pdf'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ryuhmo-images.pdf';a.click();msg.textContent='PDF downloaded.';
+}catch(e){msg.textContent='PDF creation failed. Try a different image.'}
+}
+</script>
+</body>
+</html>
